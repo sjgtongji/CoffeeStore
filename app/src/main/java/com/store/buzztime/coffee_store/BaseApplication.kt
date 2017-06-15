@@ -21,6 +21,7 @@ class BaseApplication : Application() {
 
     companion object {
         var activityStack = Stack<Activity>()
-        var context: Context? = null
+        lateinit var context: Context;
+        const val Debug: Boolean = false;
     }
 }

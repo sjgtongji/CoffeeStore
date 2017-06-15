@@ -19,16 +19,16 @@ import com.store.buzztime.coffee_store.R
 
 
 class NavigationBar(private val act: Activity, protected var vs: ViewStub) : View.OnClickListener {
-    var leftBtn: Button ? = null;
-    var rightBtn: Button? = null;
-    var titleText: TextView? = null;
-    var layout: RelativeLayout? = null;
-    var titleView: RelativeLayout? = null;
+    lateinit var leftBtn: Button;
+    lateinit var rightBtn: Button;
+    lateinit var titleText: TextView;
+    lateinit var layout: RelativeLayout;
+    lateinit var titleView: RelativeLayout;
 
 
     var isHidden = false
         private set
-    protected var view: View ? = null;
+    lateinit protected var view: View;
 
     init {
         val v = initWithlayoutResID(R.layout.activity_frame_navigationbar)
@@ -41,8 +41,8 @@ class NavigationBar(private val act: Activity, protected var vs: ViewStub) : Vie
             rightBtn = v.findViewById(R.id.activity_frame_title_btn_right) as Button
             // rightBtn.getPaint().setFakeBoldText(true);
             titleText = v.findViewById(R.id.activity_frame_title_text) as TextView
-            leftBtn!!.setOnClickListener(this)
-            rightBtn!!.setOnClickListener(this)
+            leftBtn.setOnClickListener(this)
+            rightBtn.setOnClickListener(this)
         }
 
     }
@@ -64,65 +64,65 @@ class NavigationBar(private val act: Activity, protected var vs: ViewStub) : Vie
     }
 
     fun setBackground(resid: Int) {
-        layout!!.setBackgroundResource(resid)
+        layout.setBackgroundResource(resid)
     }
 
     fun setBackground(color: String) {
-        layout!!.setBackgroundColor(Color.parseColor(color))
+        layout.setBackgroundColor(Color.parseColor(color))
     }
 
 
     override fun onClick(v: View) {}
 
     fun hiddenButtons() {
-        leftBtn!!.visibility = View.GONE
-        rightBtn!!.visibility = View.GONE
+        leftBtn.visibility = View.GONE
+        rightBtn.visibility = View.GONE
     }
 
     fun displayButtons() {
-        leftBtn!!.visibility = View.VISIBLE
-        rightBtn!!.visibility = View.VISIBLE
+        leftBtn.visibility = View.VISIBLE
+        rightBtn.visibility = View.VISIBLE
     }
 
     fun hiddenLeftButton() {
-        leftBtn!!.visibility = View.GONE
+        leftBtn.visibility = View.GONE
     }
 
     fun hiddenRightButton() {
-        rightBtn!!.visibility = View.GONE
+        rightBtn.visibility = View.GONE
     }
 
     fun displayLeftButton() {
-        leftBtn!!.visibility = View.VISIBLE
+        leftBtn.visibility = View.VISIBLE
     }
 
     fun displayRightButton() {
-        rightBtn!!.visibility = View.VISIBLE
+        rightBtn.visibility = View.VISIBLE
     }
 
     fun displayTitle() {
-        titleView!!.visibility = View.VISIBLE
+        titleView.visibility = View.VISIBLE
     }
 
     fun hiddenTitle() {
-        titleView!!.visibility = View.GONE
+        titleView.visibility = View.GONE
     }
 
     fun setTitle(s: String) {
-        titleText!!.text = s
+        titleText.text = s
     }
 
     fun setTitle(strId: Int) {
-        titleText!!.setText(strId)
+        titleText.setText(strId)
     }
 
     fun setTextLeftButton(s: String) {
-        leftBtn!!.text = s
+        leftBtn.text = s
         displayLeftButton()
     }
 
     fun setTextRightButton(s: String) {
-        rightBtn!!.text = s
+        rightBtn.text = s
         displayRightButton()
     }
 
