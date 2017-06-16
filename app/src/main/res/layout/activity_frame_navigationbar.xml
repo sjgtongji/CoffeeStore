@@ -18,7 +18,7 @@
         android:textSize="16sp"
         android:padding="3dp"
         android:gravity="left|center_vertical"
-        android:drawableLeft="@drawable/navigationbar_leftbtn_icon2"
+        android:drawableLeft="@mipmap/back"
         android:textColor="@drawable/textcolor_selecter"/>
 
     <RelativeLayout
