@@ -40,6 +40,11 @@ dependencies {
 
     compile "org.jetbrains.anko:anko-sdk25:$anko_version"
     compile "org.jetbrains.anko:anko-appcompat-v7-common:$anko_version"
+
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+
+    compile 'io.reactivex:rxjava:1.0.12'
+    compile 'io.reactivex:rxandroid:0.24.0'
 }
 repositories {
     mavenCentral()
