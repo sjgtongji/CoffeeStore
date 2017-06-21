@@ -9,19 +9,34 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import com.google.gson.Gson
+import com.squareup.okhttp.MediaType
+import com.squareup.okhttp.RequestBody
 import com.store.buzztime.coffee_store.Bean.User
 import com.store.buzztime.coffee_store.databinding.ActivityMainBinding
+import com.store.buzztime.coffee_store.http.*
 import kotlinx.android.synthetic.main.activity_main.*
+import org.w3c.dom.Text
 
 
 class MainActivity : BaseActivity() , View.OnClickListener{
 
+    var LOGIN_URL : String = "http://waimaitest.buzztimecoffee.com";
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.btn_login -> {
                 var name : String = et_name.text.toString();
                 var password : String = et_password.text.toString();
+                user.name = name;
+                user.password = password;
                 // TODO login
+                LOGIN_URL.request().get().rxExecute()
+                        .map({ r -> r.body().string() })
+                        .observeOnMain()
+                        .subscribeSafeNext { result -> Log.d(TAG, "request result: $result");}
+
+                Settings.LOGIN_URL.request().post(RequestBody.create(MediaType.parse("application/json; charset=UTF-8") , Gson().toJson(user))).rxExecute().map({ r -> r.body().string() })
+                        .observeOnMain().subscribeSafeNext { result ->  Log.d(TAG, "request result: $result");}
             }
             else -> {}
         }
@@ -50,7 +65,6 @@ class MainActivity : BaseActivity() , View.OnClickListener{
         })
 
         btn_login.setOnClickListener(this)
-
     }
 
     override fun initDatas(view : View) {
@@ -62,5 +76,6 @@ class MainActivity : BaseActivity() , View.OnClickListener{
         super.onCreate(savedInstanceState)
         super.setContentView(R.layout.activity_main)
     }
+
 
 }
