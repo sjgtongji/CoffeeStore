@@ -5,20 +5,19 @@ package com.store.buzztime.coffee_store.http
  */
 
 class Settings{
-
-    var SERVER_DEBUG = "http://waimaitest.buzztimecoffee.com/"
-    var SERVER_RELEASE = "http://waimai.buzztimecoffee.com/";
-    var LOGIN = "login";
     companion object{
         var DEBUG : Boolean = true;
+        var SERVER_DEBUG = "http://139.196.228.248:52072/Rest/CoffeeService/getManager"
+        var SERVER_RELEASE = "http://waimai.buzztimecoffee.com/";
+        var LOGIN = "login";
         lateinit var LOGIN_URL : String;
-    }
 
-    init {
-        LOGIN_URL = if(DEBUG){
-            SERVER_DEBUG + LOGIN;
-        }else{
-            SERVER_RELEASE + LOGIN;
+        init {
+            LOGIN_URL = if(DEBUG){
+                SERVER_DEBUG;
+            }else{
+                SERVER_RELEASE + LOGIN;
+            }
         }
     }
 }
