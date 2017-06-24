@@ -122,9 +122,8 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun hideProgressDialog() {
-        if (dialog != null) {
             dialog.dismiss()
-        }
+
     }
 
     fun <T> get(url : String  , callback: HttpCallback<T>){
