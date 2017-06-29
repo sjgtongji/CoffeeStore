@@ -22,7 +22,8 @@
                 android:layout_gravity="center"/>
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
                 <ImageView
                     android:id="@+id/iv_name"
                     android:layout_width="wrap_content"
@@ -40,7 +41,8 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
                 <ImageView
                     android:id="@+id/iv_password"
                     android:layout_width="wrap_content"
@@ -60,10 +62,9 @@
                 android:id="@+id/btn_login"
                 android:layout_width="@dimen/btn_width"
                 android:layout_height="@dimen/btn_height"
-                android:background="@drawable/bg_btn"
+                style="@style/yellow_btn"
                 android:text="@string/login"
-                android:textColor="@color/white"
-                android:layout_gravity="center"/>
+                android:layout_marginTop="10dp"/>
         </LinearLayout>
         <!--<TextView-->
             <!--android:id="@+id/tv_main"-->

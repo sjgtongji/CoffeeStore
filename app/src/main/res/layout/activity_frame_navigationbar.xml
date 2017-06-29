@@ -3,7 +3,7 @@
     android:id="@+id/activity_frame_title_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_navigate" >
+    android:background="@color/bg_white" >
 
     <Button
         android:id="@+id/activity_frame_title_btn_left"
@@ -37,7 +37,7 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:text=""
-            android:textColor="#ffffff"
+            android:textColor="@color/black"
             android:textSize="@dimen/big_text_size" />
     </RelativeLayout>
 
@@ -54,5 +54,5 @@
         android:textSize="16sp"
         android:gravity="right|center_vertical"
         android:padding="3dp"
-        android:textColor="@drawable/textcolor_selecter" />
+        android:textColor="@color/text_yellow" />
 </RelativeLayout>

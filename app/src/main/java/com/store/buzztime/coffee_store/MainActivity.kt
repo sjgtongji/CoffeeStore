@@ -1,8 +1,12 @@
 package com.store.buzztime.coffee_store
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.TextWatcher
@@ -44,6 +48,7 @@ class MainActivity : BaseActivity() , View.OnClickListener{
 
                     override fun onSuccess(t: LoginResp?) {
                         Log.d(TAG , "success")
+                        pushActivity(OrderActivity::class.java)
                     }
 
                     override fun onFail(t: HttpBaseResp?) {
@@ -66,9 +71,18 @@ class MainActivity : BaseActivity() , View.OnClickListener{
 
     var user : User = User();
     lateinit var dataBind : ActivityMainBinding;
+    var permissions : MutableList<String> = mutableListOf(android.Manifest.permission.READ_PHONE_STATE);
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun initViews() {
-
+        navigationBar.hiddenButtons()
+        navigationBar.setTitle("登录")
+        for(permission in permissions){
+            var hasPermission : Boolean = checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+            if(!hasPermission){
+                requestPermissions( permissions.toTypedArray(), 0);
+            }
+        }
     }
 
     override fun initEvents() {

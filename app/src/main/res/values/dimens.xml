@@ -12,10 +12,10 @@
     <dimen name="layout_padding_left_right">10dp</dimen>
     <dimen name="layout_padding_top_bottom">5dp</dimen>
     <dimen name="btn_padding">10dp</dimen>
-    <dimen name="text_size_h1">20px</dimen>
-    <dimen name="text_size_h2">18px</dimen>
-    <dimen name="text_size_content">16px</dimen>
-    <dimen name="text_size_s">14px</dimen>
-    <dimen name="btn_width">150dp</dimen>
-    <dimen name="btn_height">30dp</dimen>
+    <dimen name="text_size_h1">20dp</dimen>
+    <dimen name="text_size_h2">18dp</dimen>
+    <dimen name="text_size_content">16dp</dimen>
+    <dimen name="text_size_s">14dp</dimen>
+    <dimen name="btn_width">300dp</dimen>
+    <dimen name="btn_height">60dp</dimen>
 </resources>
