@@ -19,6 +19,7 @@ import com.google.gson.Gson
 import com.squareup.okhttp.MediaType
 import com.squareup.okhttp.RequestBody
 import com.store.buzztime.coffee_store.Bean.User
+import com.store.buzztime.coffee_store.R.id.btn_login
 import com.store.buzztime.coffee_store.databinding.ActivityMainBinding
 import com.store.buzztime.coffee_store.http.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,7 +27,6 @@ import org.w3c.dom.Text
 import rx.functions.Action
 import rx.functions.Action0
 import rx.functions.Action1
-
 
 class MainActivity : BaseActivity() , View.OnClickListener{
     override fun onClick(v: View?) {
@@ -57,13 +57,6 @@ class MainActivity : BaseActivity() , View.OnClickListener{
 
                 }
                 get(address , callback);
-//                address.request().get().rxExecute()
-//                        .map({ r -> r.body().string() })
-//                        .observeOnMain()
-//                        .subscribeSafeNext { result -> Log.d(TAG, "request result: $result");}
-//                ()
-//                Settings.LOGIN_URL.request().post(RequestBody.create(MediaType.parse("application/json; charset=UTF-8") , Gson().toJson(user))).rxExecute().map({ r -> r.body().string() })
-//                        .observeOnMain().subscribeSafeNext { result ->  Log.d(TAG, "request result: $result");}
             }
             else -> {}
         }
