@@ -35,6 +35,10 @@
         <item name="android:textColor">@color/text_blue</item>
         <item name="android:textSize">@dimen/text_size_s</item>
     </style>
+    <style name="yellow_text_h1">
+        <item name="android:textColor">@color/text_yellow</item>
+        <item name="android:textSize">@dimen/text_size_h1</item>
+    </style>
     <style name="yellow_btn">
         <item name="android:textColor">@color/bg_white</item>
         <item name="android:textSize">@dimen/text_size_content</item>

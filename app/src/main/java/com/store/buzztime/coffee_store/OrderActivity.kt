@@ -26,7 +26,7 @@ class OrderActivity : BaseActivity(){
         navigationBar.displayRightButton()
         navigationBar.rightBtn.text = "配送时间"
         navigationBar.rightBtn.setCompoundDrawables(resources.getDrawable(R.mipmap.add) , null , null , null)
-        rv_orders.layoutManager = GridLayoutManager(this , 4);
+        rv_orders.layoutManager = GridLayoutManager(this, 1);
         rv_orders.adapter = OrderAdapter(orders)
 
     }
