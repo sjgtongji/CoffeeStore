@@ -4,9 +4,14 @@
         <variable name="data" type="com.store.buzztime.coffee_store.Bean.Order" />
     </data>
     <LinearLayout
-        android:orientation="vertical" android:layout_width="800px"
+        android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/activity_vertical_margin">
+        android:padding="@dimen/activity_vertical_margin"
+        android:background="@color/bg_white"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,7 +37,8 @@
                 android:orientation="vertical"
                 android:layout_toLeftOf="@id/tv_sum"
                 android:layout_toRightOf="@id/iv_coffee"
-                android:layout_centerVertical="true">
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -57,7 +63,126 @@
                     android:text="@{data.createTime}"
                     style="@style/gray_text_s"/>
             </LinearLayout>
-
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/bg_gray"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"></View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/gray_text_content"
+                android:text="地址:"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/gray_text_content"
+                android:text="@{data.address}"
+                android:maxLines="3"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/bg_gray"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"></View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/gray_text_content"
+                android:text="配送时间:"/>
+            <TextView
+                android:id="@+id/tv_delivery_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/gray_text_content"
+                android:text="@{data.distributeTime}"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/bg_gray"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"></View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/red_text_content"
+                android:text="备注:"/>
+            <TextView
+                android:id="@+id/tv_remark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/red_text_content"
+                android:text="@{data.remark}"
+                android:maxLines="3"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/bg_gray"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"></View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/black_text_content"
+                android:text="骑手:"/>
+            <TextView
+                android:id="@+id/tv_distributer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/black_text_content"
+                android:text="@{data.distrbuterName}"
+                android:maxLines="3"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/bg_gray"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"></View>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btn_receive"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                style="@style/yellow_btn"
+                android:text="接单"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                style="@style/white_btn"
+                android:text="取消订单"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
     </LinearLayout>
 </layout>

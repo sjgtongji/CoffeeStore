@@ -28,7 +28,7 @@ abstract class BaseActivity : AppCompatActivity() {
     lateinit var rootView: RelativeLayout;
     lateinit var bodyView: View;
     lateinit var application: BaseApplication;
-    protected var TAG = this.javaClass.simpleName;
+    var TAG = this.javaClass.simpleName;
     lateinit protected var dialog: ProgressDialog;
     lateinit protected var context: Context;
     var gson : Gson = Gson();
