@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable name="data" type="com.store.buzztime.coffee_store.Bean.Periods" />
+    </data>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:id="@+id/rl_period_name"
+        android:background="@color/bg_white">
+        <TextView
+            android:id="@+id/tv_period_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            style="@style/black_text_h1"
+            android:text="@{data.name}"
+            android:layout_centerHorizontal="true"/>
+        <View
+            android:id="@+id/view_underline"
+            android:layout_width="40dp"
+            android:layout_height="5dp"
+            android:background="@color/text_yellow"
+            android:layout_below="@+id/tv_period_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"></View>
+    </RelativeLayout>
+</layout>

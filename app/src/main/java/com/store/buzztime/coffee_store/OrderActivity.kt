@@ -34,6 +34,9 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 tv_finish.textColor = resources.getColor(R.color.text_yellow)
                 view_finish.backgroundColor = resources.getColor(R.color.text_yellow)
             }
+            R.id.activity_frame_title_btn_right -> {
+                pushActivity(PeriodsActivity::class.java)
+            }
             else -> {
 
             }
@@ -50,8 +53,8 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         navigationBar.hiddenLeftButton()
         navigationBar.displayRightButton()
         navigationBar.rightBtn.text = "配送时间"
-        navigationBar.rightBtn.setCompoundDrawables(resources.getDrawable(R.mipmap.add) , null , null , null)
-        rv_orders.layoutManager = GridLayoutManager(this, 1)
+        navigationBar.rightBtn.setOnClickListener(this)
+        rv_orders.layoutManager = GridLayoutManager(this, 2)
         rv_orders.adapter = OrderAdapter(orders)
 
     }
@@ -90,37 +93,14 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             p0.btn_cancel.setOnClickListener(this)
             p0.btn_cancel.setTag(p1)
             p0.bind(data[p1]);
-//            p0.btn_receive.setOnClickListener(View.OnClickListener {
-//                Log.d("" , "receive")
-//            })
-//            p0.btn_cancel.setOnClickListener(View.OnClickListener {
-//                Log.d("" , "cancel")
-//            })
-
         }
 
         override fun onCreateViewHolder(p0: ViewGroup, p1: Int): OrderViewHolder {
             val layoutInflater = LayoutInflater.from(p0.context)
-//            val view : View = layoutInflater.inflate(R.layout.adapter_order, p0 , false)
-//            view.setTag(p1)
-//            val binding: ViewDataBinding = AdapterOrderBinding.bind(view)
             val binding: ViewDataBinding =
                     DataBindingUtil.inflate(layoutInflater, R.layout.adapter_order, p0, false)
-//            Log.d("" , binding.root.javaClass.simpleName)
-//            AdapterOrderBinding.bind()
-//            binding.root.findViewById(R.id.btn_receive).setOnClickListener(View.OnClickListener {
-//                Log.d("" , p1.toString() + "receive")
-//            })
-//            binding.root.findViewById(R.id.btn_cancel).setOnClickListener(View.OnClickListener {
-//                Log.d("" , p1.toString() + "cancel")
-//            })
-//            view.findViewById(R.id.btn_receive).setOnClickListener(this)
-//            view.findViewById(R.id.btn_cancel).setOnClickListener(this)
-//            view.findViewById(R.id.btn_receive).setTag(p1)
-//            view.findViewById(R.id.btn_cancel).setTag(p1)
+
             val holder = OrderViewHolder(binding);
-//            holder.btn_receive = view.findViewById(R.id.btn_receive) as Button?
-//            holder.btn_cancel = view.findViewById(R.id.btn_cancel) as Button?
             return holder
         }
 
@@ -131,8 +111,8 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     class OrderViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root){
-        var btn_receive : Button;
-        var btn_cancel : Button;
+        var btn_receive : Button
+        var btn_cancel : Button
         init {
             btn_receive = binding.root.findViewById(R.id.btn_receive) as Button
             btn_cancel = binding.root.findViewById(R.id.btn_cancel) as Button
