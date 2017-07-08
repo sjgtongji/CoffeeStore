@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.store.buzztime.coffee_store.Bean.Period
 import com.store.buzztime.coffee_store.Bean.Periods
@@ -138,9 +139,12 @@ class PeriodsActivity : BaseActivity(){
             p0.view.setTag(p1)
             p0.view.setOnClickListener(this)
             if(data[p1].isOpen){
-                p0.view.background = p0.view.resources.getDrawable(R.mipmap.time_border)
+                p0.view.background = p0.view.resources.getDrawable(R.drawable.bg_period_opened)
+                p0.open.visibility = View.VISIBLE
+                p0.open.setImageResource(R.mipmap.period_opened)
             }else{
-                p0.view.background = null
+                p0.view.background = p0.view.resources.getDrawable(R.drawable.bg_period_closed)
+                p0.open.visibility = View.GONE
             }
 //            if(p1 == selectPeriods){
 //                p0.name.textColor = p0.view.resources.getColor(R.color.text_yellow)
@@ -168,9 +172,11 @@ class PeriodsActivity : BaseActivity(){
     class PeriodHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
         var view : View;
         var name : TextView;
+        var open : ImageView;
         init {
             view = binding.root.find(R.id.rl_period)
             name = binding.root.find(R.id.tv_period_name)
+            open = binding.root.find(R.id.iv_period_isopen)
         }
         fun bind(data: Any) {
             binding.setVariable(BR.data, data)

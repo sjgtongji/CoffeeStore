@@ -35,33 +35,33 @@ class MainActivity : BaseActivity() , View.OnClickListener{
             R.id.btn_login -> {
 //                val app = getApplication() as BaseApplication;
 //                app.speechHelper.startSpeaking("您有新的订单")
-                (getApplication() as BaseApplication).speechHelper!!.startSpeaking("您有新的订单")
+//                (getApplication() as BaseApplication).speechHelper!!.startSpeaking("您有新的订单")
 //                showDialog();
-//                var name : String = et_name.text.toString();
-//                var password : String = et_password.text.toString();
-//                user.name = name;
-//                user.password = password;
-//                var telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager;
-//                var deviceId = telephonyManager.deviceId;
-//                // TODO login
-//                var address = "${Settings.LOGIN_URL}?name=name&passWord=passWord&deviceId=1";
-//                Log.d(TAG , address)
-//                var callback = object  : HttpCallback<LoginResp>(LoginResp::class.java){
-//                    override fun onTestRest(): LoginResp {
-//                        return LoginResp();
-//                    }
-//
-//                    override fun onSuccess(t: LoginResp?) {
-//                        Log.d(TAG , "success")
-//                        pushActivity(OrderActivity::class.java)
-//                    }
-//
-//                    override fun onFail(t: HttpBaseResp?) {
-//                        Log.e(TAG , t!!.message);
-//                    }
-//
-//                }
-//                get(address , callback);
+                var name : String = et_name.text.toString();
+                var password : String = et_password.text.toString();
+                user.name = name;
+                user.password = password;
+                var telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager;
+                var deviceId = telephonyManager.deviceId;
+                // TODO login
+                var address = "${Settings.LOGIN_URL}?name=name&passWord=passWord&deviceId=1";
+                Log.d(TAG , address)
+                var callback = object  : HttpCallback<LoginResp>(LoginResp::class.java){
+                    override fun onTestRest(): LoginResp {
+                        return LoginResp();
+                    }
+
+                    override fun onSuccess(t: LoginResp?) {
+                        Log.d(TAG , "success")
+                        pushActivity(OrderActivity::class.java)
+                    }
+
+                    override fun onFail(t: HttpBaseResp?) {
+                        Log.e(TAG , t!!.message);
+                    }
+
+                }
+                get(address , callback);
             }
             else -> {}
         }

@@ -11,7 +11,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:id="@+id/rl_period"
-        android:background="@mipmap/time_border">
+        android:background="@drawable/bg_period_opened">
         <TextView
             android:id="@+id/tv_period_name"
             android:layout_width="wrap_content"
@@ -19,5 +19,12 @@
             android:text="@{data.name}"
             android:layout_centerInParent="true"
             style="@style/black_text_h1"/>
+        <ImageView
+            android:id="@+id/iv_period_isopen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/period_opened"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 </layout>
