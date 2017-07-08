@@ -11,13 +11,17 @@ class Settings{
         var SERVER_DEBUG = "http://139.196.228.248:52072/Rest/CoffeeService/getManager"
         var SERVER_RELEASE = "http://waimai.buzztimecoffee.com/";
         var LOGIN = "login";
+        var GET_UNRECEIVE_ORDERS = "getUnreceiveOrders";
         lateinit var LOGIN_URL : String;
+        lateinit var GET_UNRECEIVE_ORDERS_URL : String;
 
         init {
-            LOGIN_URL = if(DEBUG){
-                SERVER_DEBUG;
+            if(DEBUG){
+                LOGIN_URL = SERVER_DEBUG
+                GET_UNRECEIVE_ORDERS_URL = SERVER_DEBUG
             }else{
-                SERVER_RELEASE + LOGIN;
+                LOGIN_URL = SERVER_RELEASE + LOGIN
+                GET_UNRECEIVE_ORDERS_URL = SERVER_RELEASE + GET_UNRECEIVE_ORDERS
             }
         }
     }

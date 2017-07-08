@@ -1,5 +1,6 @@
 package com.store.buzztime.coffee_store
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -18,7 +19,6 @@ import com.google.gson.Gson
 import com.store.buzztime.coffee_store.databinding.ActivityMainBinding
 import com.store.buzztime.coffee_store.http.*
 import com.store.buzztime.coffee_store.view.NavigationBar
-
 /**
  * Created by jigangsun on 2017/6/14.
  */
@@ -109,23 +109,6 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun showProgressDialog(text: String, listener: DialogInterface.OnCancelListener?) {
-//        dialog = DialogUtils.showProgressDialog(this, text, listener)
-    }
-
-    fun showProgressDialog() {
-        showProgressDialog("数据加载中,请稍候...")
-    }
-
-    fun showProgressDialog(text: String) {
-        showProgressDialog(text, null)
-    }
-
-    fun hideProgressDialog() {
-            dialog.dismiss()
-
-    }
-
     fun <T> get(url : String  , callback: HttpCallback<T>){
         var baseResp : HttpBaseResp = HttpBaseResp();
         url.request().get().rxExecute()
@@ -148,5 +131,53 @@ abstract class BaseActivity : AppCompatActivity() {
                         }
                     }
                 }
+    }
+
+
+    fun showProgressDialog(context: Context,
+                           msg: String, listerner: DialogInterface.OnCancelListener?): ProgressDialog {
+        return this.showProgressDialog(context, msg, true, 100, listerner)
+    }
+
+    fun showDialog() {
+        dialog = showProgressDialog(this, "数据加载中,请稍候..." , null)
+    }
+
+    fun hideDialog() {
+        if (dialog != null) {
+            dialog.dismiss()
+        }
+    }
+
+    fun showProgressDialog(context: Context,
+                           msg: String, isIndeterminate: Boolean, max: Int,
+                           listerner: DialogInterface.OnCancelListener?): ProgressDialog {
+        val pdlg = createProgressDialog(context, msg,
+                isIndeterminate, max, listerner)
+        try {
+            pdlg.show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return pdlg
+    }
+    fun createProgressDialog(context: Context,
+                             msg: String, isIndeterminate: Boolean, max: Int,
+                             listerner: DialogInterface.OnCancelListener?): ProgressDialog {
+        val pdlg = ProgressDialog(context, AlertDialog.THEME_HOLO_LIGHT)
+        pdlg.setTitle("")
+        pdlg.setMessage(msg)
+        pdlg.isIndeterminate = isIndeterminate
+        pdlg.setCanceledOnTouchOutside(false) // 4.0下默认为true，必须显式设为false
+        if (isIndeterminate) {
+            pdlg.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+        } else {
+            pdlg.max = max
+            pdlg.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+        }
+        pdlg.setOnCancelListener(listerner)
+        // pdlg.setIndeterminateDrawable(context.getResources().getDrawable(R.drawable.frame_loading));
+        return pdlg
     }
 }

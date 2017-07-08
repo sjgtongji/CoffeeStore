@@ -12,6 +12,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.store.buzztime.coffee_store.Bean.Order
 import com.store.buzztime.coffee_store.databinding.AdapterOrderBinding
+import com.store.buzztime.coffee_store.http.HttpBaseResp
+import com.store.buzztime.coffee_store.http.HttpCallback
+import com.store.buzztime.coffee_store.http.LoginResp
 import kotlinx.android.synthetic.main.activity_order.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
@@ -65,7 +68,27 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     override fun initDatas(view: View) {
-
+//        showDialog();
+//        var orders : List<Order> = listOf<Order>();
+//        var callback = object  : HttpCallback<List<Order>>(orders.javaClass){
+//            override fun onTestRest(): List<Order> {
+//                return listOf<Order>(
+//                        Order(),
+//                        Order(),
+//                        Order()
+//                )
+//            }
+//
+//            override fun onSuccess(t: List<Order>?) {
+//                Log.d(TAG , "success")
+//                pushActivity(OrderActivity::class.java)
+//            }
+//
+//            override fun onFail(t: HttpBaseResp?) {
+//                Log.e(TAG , t!!.message);
+//            }
+//
+//        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

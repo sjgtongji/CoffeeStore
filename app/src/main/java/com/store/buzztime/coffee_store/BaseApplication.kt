@@ -14,14 +14,15 @@ import java.util.*
  * Created by fg114 on 2016/2/22.
  */
 class BaseApplication : Application() {
+    var speechHelper : SpeechHelper? = null
     override fun onCreate() {
         super.onCreate()
         context = this
+        speechHelper = SpeechHelper(this)
     }
 
     companion object {
         var activityStack = Stack<Activity>()
         lateinit var context: Context;
-        const val Debug: Boolean = false;
     }
 }
