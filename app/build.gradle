@@ -43,8 +43,6 @@ dependencies {
     compile 'io.reactivex:rxjava:1.0.12'
     compile 'io.reactivex:rxandroid:0.24.0'
     compile 'com.google.code.gson:gson:2.8.0'
-//    implementation files('src/main/jniLibs/Sunflower.jar')
-//    implementation files('src/main/jniLibs/Msc.jar')
 }
 repositories {
     mavenCentral()
