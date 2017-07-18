@@ -32,6 +32,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 view_unfinish.backgroundColor = resources.getColor(R.color.text_yellow)
                 tv_finish.textColor = resources.getColor(R.color.black)
                 view_finish.backgroundColor = resources.getColor(R.color.bg_white)
+                getUnreceiveOrders();
             }
             R.id.rl_finish -> {
                 tv_unfinish.textColor = resources.getColor(R.color.black)
@@ -59,9 +60,8 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         navigationBar.displayRightButton()
         navigationBar.rightBtn.text = "配送时间"
         navigationBar.rightBtn.setOnClickListener(this)
-        rv_orders.layoutManager = GridLayoutManager(this, 2)
+        rv_orders.layoutManager = GridLayoutManager(this, 1)
         rv_orders.adapter = OrderAdapter(orders)
-
     }
 
     override fun initEvents() {
@@ -71,6 +71,10 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 
     override fun initDatas(view: View) {
 //        showDialog()
+        getUnreceiveOrders();
+    }
+
+    fun getUnreceiveOrders(){
         var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
             override fun onTestRest(): OrderResp {
                 return OrderResp()
@@ -78,6 +82,9 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 
             override fun onSuccess(t: OrderResp?) {
                 Log.d(TAG , "success" + Gson().toJson(t))
+                var app = getApplication() as BaseApplication
+                app.unReceiveOrders = t!!.Items;
+                rv_orders.adapter = OrderAdapter(t.Items!!)
 //                pushActivity(OrderActivity::class.java)
             }
 
@@ -88,7 +95,6 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         }
         get("http://139.196.228.248:52072/Rest/CoffeeService/getOrderByResUUID?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10", callback)
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         super.setContentView(R.layout.activity_order)

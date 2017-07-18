@@ -3,6 +3,7 @@ package com.store.buzztime.coffee_store
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import com.store.buzztime.coffee_store.Bean.Order
 import com.store.buzztime.coffee_store.http.LoginResp
 import java.util.*
 
@@ -17,6 +18,7 @@ import java.util.*
 class BaseApplication : Application() {
     var speechHelper : SpeechHelper? = null
     var loginResp : LoginResp? = null
+    var unReceiveOrders : List<Order>? = null
     override fun onCreate() {
         super.onCreate()
         context = this
