@@ -10,11 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.google.gson.Gson
 import com.store.buzztime.coffee_store.Bean.Order
 import com.store.buzztime.coffee_store.databinding.AdapterOrderBinding
 import com.store.buzztime.coffee_store.http.HttpBaseResp
 import com.store.buzztime.coffee_store.http.HttpCallback
 import com.store.buzztime.coffee_store.http.LoginResp
+import com.store.buzztime.coffee_store.http.OrderResp
 import kotlinx.android.synthetic.main.activity_order.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
@@ -68,27 +70,23 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     override fun initDatas(view: View) {
-//        showDialog();
-//        var orders : List<Order> = listOf<Order>();
-//        var callback = object  : HttpCallback<List<Order>>(orders.javaClass){
-//            override fun onTestRest(): List<Order> {
-//                return listOf<Order>(
-//                        Order(),
-//                        Order(),
-//                        Order()
-//                )
-//            }
-//
-//            override fun onSuccess(t: List<Order>?) {
-//                Log.d(TAG , "success")
+//        showDialog()
+        var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
+            override fun onTestRest(): OrderResp {
+                return OrderResp()
+            }
+
+            override fun onSuccess(t: OrderResp?) {
+                Log.d(TAG , "success" + Gson().toJson(t))
 //                pushActivity(OrderActivity::class.java)
-//            }
-//
-//            override fun onFail(t: HttpBaseResp?) {
-//                Log.e(TAG , t!!.message);
-//            }
-//
-//        }
+            }
+
+            override fun onFail(t: HttpBaseResp?) {
+                Log.e(TAG , t!!.message);
+            }
+
+        }
+        get("http://139.196.228.248:52072/Rest/CoffeeService/getOrderByResUUID?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10", callback)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

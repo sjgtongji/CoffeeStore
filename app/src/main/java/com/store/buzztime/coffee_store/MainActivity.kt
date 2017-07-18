@@ -23,6 +23,7 @@ import com.store.buzztime.coffee_store.R.id.btn_login
 import com.store.buzztime.coffee_store.databinding.ActivityMainBinding
 import com.store.buzztime.coffee_store.http.*
 import kotlinx.android.synthetic.main.activity_main.*
+import org.apache.http.params.HttpParams
 import org.w3c.dom.Text
 import rx.functions.Action
 import rx.functions.Action0
@@ -42,9 +43,12 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                 user.name = name;
                 user.password = password;
                 var telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager;
-                var deviceId = telephonyManager.deviceId;
+                var deviceId = android.os.Build.SERIAL
+                user.deviceId = deviceId
                 // TODO login
-                var address = "${Settings.LOGIN_URL}?name=name&passWord=passWord&deviceId=1";
+                var address = "${Settings.LOGIN_URL}?name=loginname&passWord=password&deviceId=${deviceId}";
+                var body = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), Gson().toJson(user))
+
                 Log.d(TAG , address)
                 var callback = object  : HttpCallback<LoginResp>(LoginResp::class.java){
                     override fun onTestRest(): LoginResp {
@@ -52,7 +56,9 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                     }
 
                     override fun onSuccess(t: LoginResp?) {
-                        Log.d(TAG , "success")
+//                        Log.d(TAG , "success" + Gson().toJson(t))
+                        val app = getApplication() as BaseApplication
+                        app.loginResp = t
                         pushActivity(OrderActivity::class.java)
                     }
 
@@ -61,7 +67,7 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                     }
 
                 }
-                get(address , callback);
+                post(address ,body ,  callback);
             }
             else -> {}
         }

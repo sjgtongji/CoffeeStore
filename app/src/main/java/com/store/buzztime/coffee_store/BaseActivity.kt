@@ -16,6 +16,7 @@ import android.view.ViewStub
 import android.view.Window
 import android.widget.RelativeLayout
 import com.google.gson.Gson
+import com.squareup.okhttp.RequestBody
 import com.store.buzztime.coffee_store.databinding.ActivityMainBinding
 import com.store.buzztime.coffee_store.http.*
 import com.store.buzztime.coffee_store.view.NavigationBar
@@ -132,6 +133,32 @@ abstract class BaseActivity : AppCompatActivity() {
                     }
                 }
     }
+
+    fun <T> post(url : String  , body : RequestBody , callback: HttpCallback<T>){
+        var baseResp : HttpBaseResp = HttpBaseResp();
+        url.request().post(body).rxExecute()
+                .map({r -> r.body().string()})
+                .observeOnMain()
+                .subscribeSafeNext { result ->
+                    Log.d(TAG, result)
+                    if(Settings.TEST_REST){
+                        callback.onSuccess(callback.onTestRest());
+                    }else{
+                        baseResp = toResp(result);
+                        when(baseResp.code){
+                            200 -> {
+                                var resp : T = gson.fromJson(baseResp.value , callback.claze) as T;
+                                callback.onSuccess(resp);
+                            }
+                            else -> {
+                                callback.onFail(baseResp)
+                            }
+                        }
+                    }
+                }
+    }
+
+
 
 
     fun showProgressDialog(context: Context,

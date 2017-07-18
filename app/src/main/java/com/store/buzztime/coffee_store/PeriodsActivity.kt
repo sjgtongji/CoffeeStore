@@ -8,13 +8,19 @@ import android.support.annotation.RequiresApi
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.gson.Gson
 import com.store.buzztime.coffee_store.Bean.Period
 import com.store.buzztime.coffee_store.Bean.Periods
+import com.store.buzztime.coffee_store.http.HttpBaseResp
+import com.store.buzztime.coffee_store.http.HttpCallback
+import com.store.buzztime.coffee_store.http.OrderResp
+import com.store.buzztime.coffee_store.http.PeriodsResp
 import kotlinx.android.synthetic.main.activity_periods.*
 import org.jetbrains.anko.Orientation
 import org.jetbrains.anko.backgroundColor
@@ -54,7 +60,22 @@ class PeriodsActivity : BaseActivity(){
     }
 
     override fun initDatas(view: View) {
+        var callback = object  : HttpCallback<PeriodsResp>(PeriodsResp::class.java){
+            override fun onTestRest(): PeriodsResp {
+                return PeriodsResp()
+            }
 
+            override fun onSuccess(t: PeriodsResp?) {
+                Log.d(TAG , "success" + Gson().toJson(t))
+//                pushActivity(OrderActivity::class.java)
+            }
+
+            override fun onFail(t: HttpBaseResp?) {
+                Log.e(TAG , t!!.message);
+            }
+
+        }
+        get("http://139.196.228.248:52072/Rest/CoffeeService/GetBusinessHourWeekType?resUUID=66de6c00-407c-4997-8bbe-ec09a3c8a7e5", callback)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/gray_text_content"
-                android:text="@{data.address}"
+                android:text=""
                 android:maxLines="3"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
@@ -154,7 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/black_text_content"
-                android:text="@{data.distrbuterName}"
+                android:text="@{data.distributionName}"
                 android:maxLines="3"/>
         </LinearLayout>
         <View
