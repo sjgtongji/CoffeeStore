@@ -20,6 +20,10 @@ import com.squareup.okhttp.RequestBody
 import com.store.buzztime.coffee_store.databinding.ActivityMainBinding
 import com.store.buzztime.coffee_store.http.*
 import com.store.buzztime.coffee_store.view.NavigationBar
+import java.lang.Long
+import java.text.SimpleDateFormat
+import java.util.*
+
 /**
  * Created by jigangsun on 2017/6/14.
  */
@@ -206,5 +210,24 @@ abstract class BaseActivity : AppCompatActivity() {
         pdlg.setOnCancelListener(listerner)
         // pdlg.setIndeterminateDrawable(context.getResources().getDrawable(R.drawable.frame_loading));
         return pdlg
+    }
+
+    fun formatDateTime(time : String) : String{
+        var result : String = time.replace("/Date(", "").replace(")/", "")
+        val time = result.substring(0, result.length - 5)
+        val date = Date(Long.parseLong(time))
+        val format : String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
+        return format
+    }
+
+    fun formatTimeInOneDay(time : kotlin.Long):String{
+        val perHour : kotlin.Int = 3600000
+        var hour : kotlin.Long = time.div(perHour)
+        var min : kotlin.Long  =  time.rem(perHour).div(60000)
+        if(min.toInt() == 0) {
+            return return hour.toString() + ":" + "00"
+        }else{
+            return return hour.toString() + ":" + min.toString()
+        }
     }
 }

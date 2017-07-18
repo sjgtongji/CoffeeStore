@@ -32,14 +32,7 @@ import org.jetbrains.anko.textColor
  */
 
 class PeriodsActivity : BaseActivity(){
-    var periods : List<Periods> = listOf(
-            Periods(),
-            Periods(),
-            Periods(),
-            Periods(),
-            Periods(),
-            Periods(),
-            Periods()
+    var periods : MutableList<Periods> = mutableListOf(
     )
 
     var selectPeriods : Int = 0
@@ -49,10 +42,10 @@ class PeriodsActivity : BaseActivity(){
         navigationBar.setTitle("南京西路店")
         navigationBar.displayLeftButton()
         navigationBar.hiddenRightButton()
-        rv_period_names.layoutManager = GridLayoutManager(this , periods.size)
-        periodNameAdapter = PeriodNameAdapter(periods);
-        rv_period_names.adapter = periodNameAdapter;
-        rv_periods.layoutManager = GridLayoutManager(this, 5)
+//        rv_period_names.layoutManager = GridLayoutManager(this , periods.size)
+//        periodNameAdapter = PeriodNameAdapter(periods);
+//        rv_period_names.adapter = periodNameAdapter;
+//        rv_periods.layoutManager = GridLayoutManager(this, 5)
     }
 
     override fun initEvents() {
@@ -67,6 +60,49 @@ class PeriodsActivity : BaseActivity(){
 
             override fun onSuccess(t: PeriodsResp?) {
                 Log.d(TAG , "success" + Gson().toJson(t))
+//                for(resp in t!!){
+//
+//                }
+                periods.clear()
+                var tmpIndex : MutableList<Int> = mutableListOf<Int>()
+                for(resp in t!!.items!!){
+                    for(period in resp.listBusinessHourWeek){
+                        var tmpPeriods : Periods? = null;
+                        if(!tmpIndex.contains(period.WeekDay)){
+                            tmpIndex.add(period.WeekDay)
+                            tmpPeriods = Periods()
+                            tmpPeriods.name = getPeriodName(period.WeekDay)
+                            periods.add(tmpPeriods)
+                        }else{
+                            tmpPeriods = periods.get(tmpIndex.indexOf(period.WeekDay))
+                        }
+                        var tmpPeriod = Period()
+                        tmpPeriod.isOpen = if(period.State == 1) true else false
+                        tmpPeriod.id = period.id
+                        tmpPeriod.sortIndex = period.SortIndex
+                        tmpPeriod.name = formatTimeInOneDay(period.StartTime) + "-" + formatTimeInOneDay(period.EndTime)
+                        tmpPeriods.periods.add(tmpPeriod)
+                    }
+                }
+                periods.sortWith(Comparator<Periods> { a, b ->
+                    if(getWeekDay(a.name) > getWeekDay(b.name)) 1
+                    else -1
+                })
+                if(periods.size > 0){
+                    for(tmpPeriods in periods){
+                        tmpPeriods.periods.sortWith(Comparator<Period>{a , b ->
+                            if(a.sortIndex > b.sortIndex) 1
+                            else -1
+                        })
+                    }
+                    rv_period_names.layoutManager = GridLayoutManager(this@PeriodsActivity , periods.size)
+                    periodNameAdapter = PeriodNameAdapter(periods);
+                    rv_period_names.adapter = periodNameAdapter;
+                    rv_periods.layoutManager = GridLayoutManager(this@PeriodsActivity, 5)
+                    rv_periods.adapter = PeriodAdapter(periods.get(0).periods)
+                }
+
+
 //                pushActivity(OrderActivity::class.java)
             }
 
@@ -83,6 +119,31 @@ class PeriodsActivity : BaseActivity(){
         super.setContentView(R.layout.activity_periods)
     }
 
+    fun getPeriodName(weekDay : Int): String{
+        when(weekDay){
+            1 -> return "星期一"
+            2 -> return "星期二"
+            3 -> return "星期三"
+            4 -> return "星期四"
+            5 -> return "星期五"
+            6 -> return "星期六"
+            7 -> return "星期日"
+            else -> return ""
+        }
+    }
+
+    fun getWeekDay(name : String) : Int {
+        when(name){
+            "星期一" -> return 1
+            "星期二" -> return 2
+            "星期三" -> return 3
+            "星期四" -> return 4
+            "星期五" -> return 5
+            "星期六" -> return 6
+            "星期日" -> return 7
+            else -> return 0
+        }
+    }
     inner class PeriodNameAdapter(val data : List<Periods>) : RecyclerView.Adapter<PeriodNameHolder>() , View.OnClickListener{
         override fun onClick(v: View?) {
             when(v!!.id){
@@ -204,4 +265,6 @@ class PeriodsActivity : BaseActivity(){
             binding.executePendingBindings()
         }
     }
+
+
 }

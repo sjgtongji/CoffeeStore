@@ -7,5 +7,6 @@ package com.store.buzztime.coffee_store.Bean
 class Period{
     var name : String = "9:00-9:30"
     var isOpen : Boolean = true;
-    var id : String = "";
+    var id : Int = 0;
+    var sortIndex : Int = 0
 }

@@ -43,7 +43,7 @@ class Order{
     var version : Int = 0;
     @SerializedName("memberName")
     var name : String = "王先生";
-    @SerializedName("orderMomey")
+    var orderMomey : Double = 0.00;
     var amount : String = "0.00";
     var createTime : String = "";
     var deliveryAddress : String = "";
@@ -55,4 +55,5 @@ class Order{
 
     var address : Address? = null;
     var listCOrderCommodityRelation : List<Product> = listOf<Product>();
+    var createTimeShow : String = "";
 }

@@ -17,6 +17,7 @@ import com.store.buzztime.coffee_store.http.HttpBaseResp
 import com.store.buzztime.coffee_store.http.HttpCallback
 import com.store.buzztime.coffee_store.http.LoginResp
 import com.store.buzztime.coffee_store.http.OrderResp
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_order.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
@@ -60,8 +61,8 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         navigationBar.displayRightButton()
         navigationBar.rightBtn.text = "配送时间"
         navigationBar.rightBtn.setOnClickListener(this)
-        rv_orders.layoutManager = GridLayoutManager(this, 1)
-        rv_orders.adapter = OrderAdapter(orders)
+        rv_orders.layoutManager = GridLayoutManager(this, 2)
+//        rv_orders.adapter = OrderAdapter(orders)
     }
 
     override fun initEvents() {
@@ -83,8 +84,12 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             override fun onSuccess(t: OrderResp?) {
                 Log.d(TAG , "success" + Gson().toJson(t))
                 var app = getApplication() as BaseApplication
+                for(order in t!!.Items!!){
+                    formatOrder(order)
+                }
                 app.unReceiveOrders = t!!.Items;
                 rv_orders.adapter = OrderAdapter(t.Items!!)
+
 //                pushActivity(OrderActivity::class.java)
             }
 
@@ -94,6 +99,12 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 
         }
         get("http://139.196.228.248:52072/Rest/CoffeeService/getOrderByResUUID?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10", callback)
+    }
+
+    fun formatOrder(order : Order){
+        order.amount = String.format("%.2f", order.payMomey)
+        order.distributeTime = formatDateTime(order.deliveryMinTime) + "-" + formatDateTime(order.deliveryMaxTime)
+        order.createTimeShow = formatDateTime(order.createTime)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -60,7 +60,7 @@
                     android:id="@+id/tv_create_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{data.createTime}"
+                    android:text="@{data.createTimeShow}"
                     style="@style/gray_text_s"/>
             </LinearLayout>
         </RelativeLayout>
@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/gray_text_content"
-                android:text=""
+                android:text="@{data.deliveryAddress}"
                 android:maxLines="3"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
