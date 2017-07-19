@@ -17,10 +17,7 @@ import android.widget.TextView
 import com.google.gson.Gson
 import com.store.buzztime.coffee_store.Bean.Period
 import com.store.buzztime.coffee_store.Bean.Periods
-import com.store.buzztime.coffee_store.http.HttpBaseResp
-import com.store.buzztime.coffee_store.http.HttpCallback
-import com.store.buzztime.coffee_store.http.OrderResp
-import com.store.buzztime.coffee_store.http.PeriodsResp
+import com.store.buzztime.coffee_store.http.*
 import kotlinx.android.synthetic.main.activity_periods.*
 import org.jetbrains.anko.Orientation
 import org.jetbrains.anko.backgroundColor
@@ -111,7 +108,13 @@ class PeriodsActivity : BaseActivity(){
             }
 
         }
-        get("http://139.196.228.248:52072/Rest/CoffeeService/GetBusinessHourWeekType?resUUID=66de6c00-407c-4997-8bbe-ec09a3c8a7e5", callback)
+        var url =
+                if(DEBUG){
+                    "${Settings.GET_BUSINESS_HOURWEEKTYPE_URL}?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87"
+                }else{
+                    "${Settings.GET_BUSINESS_HOURWEEKTYPE_URL}?resUUID=${application.loginResp!!.resUUID}"
+                }
+        get(url , callback)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

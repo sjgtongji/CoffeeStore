@@ -36,6 +36,7 @@ abstract class BaseActivity : AppCompatActivity() {
     var TAG = this.javaClass.simpleName;
     lateinit protected var dialog: ProgressDialog;
     lateinit protected var context: Context;
+    var DEBUG : Boolean = true
     var gson : Gson = Gson();
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

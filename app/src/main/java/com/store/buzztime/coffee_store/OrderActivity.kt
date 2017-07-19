@@ -18,6 +18,7 @@ import com.store.buzztime.coffee_store.http.HttpCallback
 import com.store.buzztime.coffee_store.http.LoginResp
 import com.store.buzztime.coffee_store.http.OrderResp
 import kotlinx.android.synthetic.main.activity_main.*
+import com.store.buzztime.coffee_store.http.*
 import kotlinx.android.synthetic.main.activity_order.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
@@ -33,13 +34,14 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 view_unfinish.backgroundColor = resources.getColor(R.color.text_yellow)
                 tv_finish.textColor = resources.getColor(R.color.black)
                 view_finish.backgroundColor = resources.getColor(R.color.bg_white)
-                getUnreceiveOrders();
+                getUnreceiveOrders()
             }
             R.id.rl_finish -> {
                 tv_unfinish.textColor = resources.getColor(R.color.black)
                 view_unfinish.backgroundColor = resources.getColor(R.color.bg_white)
                 tv_finish.textColor = resources.getColor(R.color.text_yellow)
                 view_finish.backgroundColor = resources.getColor(R.color.text_yellow)
+                getReceiverOrders()
             }
             R.id.activity_frame_title_btn_right -> {
                 pushActivity(PeriodsActivity::class.java)
@@ -50,19 +52,14 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         }
     }
 
-    var orders = listOf<Order>(
-            Order(),
-            Order(),
-            Order()
-    )
     override fun initViews() {
         navigationBar.setTitle("南京西路店")
         navigationBar.hiddenLeftButton()
         navigationBar.displayRightButton()
         navigationBar.rightBtn.text = "配送时间"
         navigationBar.rightBtn.setOnClickListener(this)
-        rv_orders.layoutManager = GridLayoutManager(this, 2)
 //        rv_orders.adapter = OrderAdapter(orders)
+        rv_orders.layoutManager = GridLayoutManager(this, 1)
     }
 
     override fun initEvents() {
@@ -98,7 +95,43 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             }
 
         }
-        get("http://139.196.228.248:52072/Rest/CoffeeService/getOrderByResUUID?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10", callback)
+        var app = getApplication() as BaseApplication
+        var url =
+                if(DEBUG){
+                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10"
+                }else{
+                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=${app.loginResp!!.resUUID}&orderState=${Settings.ORDER_CONFIRM}&startIndex=1&count=10"
+                }
+        get(url , callback)
+    }
+
+    fun getReceiverOrders(){
+        var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
+            override fun onTestRest(): OrderResp {
+                return OrderResp()
+            }
+
+            override fun onSuccess(t: OrderResp?) {
+                Log.d(TAG , "success" + Gson().toJson(t))
+                var app = getApplication() as BaseApplication
+                app.unReceiveOrders = t!!.Items;
+                rv_orders.adapter = OrderAdapter(t.Items!!)
+//                pushActivity(OrderActivity::class.java)
+            }
+
+            override fun onFail(t: HttpBaseResp?) {
+                Log.e(TAG , t!!.message);
+            }
+
+        }
+        var app = getApplication() as BaseApplication
+        var url =
+                if(DEBUG){
+                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10"
+                }else{
+                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=${app.loginResp!!.resUUID}&orderState=${Settings.ORDER_STORE_CONFIRM},${Settings.ORDER_RIDER_GET},${Settings.ORDER_RIDER_POST}&startIndex=1&count=10"
+                }
+        get(url , callback)
     }
 
     fun formatOrder(order : Order){

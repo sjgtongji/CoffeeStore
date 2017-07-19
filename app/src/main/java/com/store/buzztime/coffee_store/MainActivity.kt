@@ -46,7 +46,12 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                 var deviceId = android.os.Build.SERIAL
                 user.deviceId = deviceId
                 // TODO login
-                var address = "${Settings.LOGIN_URL}?name=loginname&passWord=password&deviceId=${deviceId}";
+                var address =
+                        if(DEBUG){
+                            "${Settings.LOGIN_URL}?name=loginname&passWord=password&deviceId=${deviceId}";
+                        }else{
+                            "${Settings.LOGIN_URL}?name=${name}&passWord=${password}&deviceId=${deviceId}";
+                        }
                 var body = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), Gson().toJson(user))
 
                 Log.d(TAG , address)
