@@ -110,10 +110,11 @@ class PeriodsActivity : BaseActivity(){
         }
         var url =
                 if(DEBUG){
-                    "${Settings.GET_BUSINESS_HOURWEEKTYPE_URL}?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87"
+                    "${Settings.GET_BUSINESS_HOURWEEKTYPE_URL}?resUUID=66de6c00-407c-4997-8bbe-ec09a3c8a7e5"
                 }else{
                     "${Settings.GET_BUSINESS_HOURWEEKTYPE_URL}?resUUID=${application.loginResp!!.resUUID}"
                 }
+        Log.e(TAG , url)
         get(url , callback)
     }
 
