@@ -18,6 +18,9 @@ class Settings{
 
         var PREF_IS_SERVICE_STARTED : String = "com.store.buzztime.coffee_store.http.isStarted"
         var ACTION_ORDER : String = "com.store.buzztime.coffee_store.http.order"
+        var ORDER_OPERATION_KEY : String = "com.store.buzztime.coffee_store.http.orderoperation"
+        var ORDER_OPERATION_CONFIRM : Int = 1
+        var ORDER_OPERATION_CANCEL : Int = 2
         var DEBUG : Boolean = true;
         var TEST_REST : Boolean = false;
         var SERVER_DEBUG = "http://139.196.228.248:52072/Rest/CoffeeService/"

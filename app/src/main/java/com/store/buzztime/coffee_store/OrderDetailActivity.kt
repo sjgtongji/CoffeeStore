@@ -1,5 +1,7 @@
 package com.store.buzztime.coffee_store
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
@@ -12,12 +14,31 @@ import android.view.ViewGroup
 import com.store.buzztime.coffee_store.Bean.Order
 import com.store.buzztime.coffee_store.Bean.Product
 import com.store.buzztime.coffee_store.databinding.ActivityOrderDetailBinding
+import com.store.buzztime.coffee_store.http.Settings
 import kotlinx.android.synthetic.main.activity_order_detail.*
 
 /**
  * Created by sjg on 2017/7/19.
  */
-class OrderDetailActivity : AppCompatActivity(){
+class OrderDetailActivity : AppCompatActivity() , View.OnClickListener{
+    override fun onClick(p0: View?) {
+        when(p0!!.id){
+            R.id.btn_receive -> {
+                var intent = Intent();
+                intent.putExtra(Settings.ORDER_OPERATION_KEY , Settings.ORDER_OPERATION_CONFIRM)
+                setResult(Activity.RESULT_OK , intent)
+                finish()
+            }
+            R.id.btn_cancel -> {
+                var intent = Intent();
+                intent.putExtra(Settings.ORDER_OPERATION_KEY , Settings.ORDER_OPERATION_CANCEL)
+                setResult(Activity.RESULT_OK , intent)
+                finish()
+            }
+            else -> {}
+        }
+    }
+
     lateinit var binding : ActivityOrderDetailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +48,8 @@ class OrderDetailActivity : AppCompatActivity(){
         binding.data = order
         lv_product.layoutManager = GridLayoutManager(this,1)
         lv_product.adapter = OrderDetailAdapter(order.listCOrderCommodityRelation)
+        btn_receive.setOnClickListener(this)
+        btn_cancel.setOnClickListener(this)
     }
 
     fun formatOrder(order : Order){

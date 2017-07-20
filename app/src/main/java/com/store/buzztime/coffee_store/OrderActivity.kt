@@ -1,5 +1,6 @@
 package com.store.buzztime.coffee_store
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -163,6 +164,22 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         super.setContentView(R.layout.activity_order)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK){
+            when(requestCode){
+                1 -> {
+                    when(data!!.getIntExtra(Settings.ORDER_OPERATION_KEY , -1)){
+                        Settings.ORDER_OPERATION_CONFIRM -> receiveOrder(application.order!!)
+                        Settings.ORDER_OPERATION_CANCEL -> cancelOrder(application.order!!)
+                        else -> {}
+                    }
+                }
+                else ->{}
+            }
+        }
+    }
+
     fun receiveOrder(order : Order){
         var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
             override fun onTestRest(): OrderResp {
@@ -217,7 +234,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 }
                 R.id.ll_order -> {
                     application.order = data.get(v.tag as Int)
-                    pushActivity(OrderDetailActivity::class.java)
+                    pushActivityForResult(OrderDetailActivity::class.java , 1)
                 }
                 else -> {Log.d("" , "error")}
             }
