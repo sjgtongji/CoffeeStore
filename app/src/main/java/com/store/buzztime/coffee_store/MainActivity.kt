@@ -40,17 +40,23 @@ class MainActivity : BaseActivity() , View.OnClickListener{
 //                showDialog();
                 var name : String = et_name.text.toString();
                 var password : String = et_password.text.toString();
-                user.name = name;
-                user.password = password;
                 var telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager;
                 var deviceId = android.os.Build.SERIAL
+
+                if(DEBUG){
+                    user.name = "loginname"
+                    user.passWord = "password"
+                }else{
+                    user.name = name
+                    user.passWord = password
+                }
                 user.deviceId = deviceId
                 // TODO login
                 var address =
                         if(DEBUG){
-                            "${Settings.LOGIN_URL}?name=loginname&passWord=password&deviceId=${deviceId}";
+                            "${Settings.LOGIN_URL}"
                         }else{
-                            "${Settings.LOGIN_URL}?name=${name}&passWord=${password}&deviceId=${deviceId}";
+                            "${Settings.LOGIN_URL}";
                         }
                 var callback = object  : HttpCallback<LoginResp>(LoginResp::class.java){
                     override fun onTestRest(): LoginResp {
@@ -61,7 +67,7 @@ class MainActivity : BaseActivity() , View.OnClickListener{
 //                        Log.d(TAG , "success" + Gson().toJson(t))
                         val app = getApplication() as BaseApplication
                         app.loginResp = t
-                        pushActivity(OrderActivity::class.java)
+                        pushActivity(OrderActivity::class.java , true)
                     }
 
                     override fun onFail(t: HttpBaseResp?) {
@@ -69,7 +75,7 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                     }
 
                 }
-                post(address  ,  callback);
+                post(address  ,  gson.toJson(user) , callback);
             }
             else -> {}
         }

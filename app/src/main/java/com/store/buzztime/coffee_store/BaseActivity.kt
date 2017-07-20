@@ -141,8 +141,8 @@ abstract class BaseActivity : AppCompatActivity() {
 //                }
     }
 
-    fun <T> post(url : String  , callback: HttpCallback<T>){
-        http.post(url  , callback)
+    fun <T> post(url : String  , params : String , callback: HttpCallback<T>){
+        http.post(url  ,params , callback)
 //        var baseResp : HttpBaseResp = HttpBaseResp();
 //        url.request().post(body).rxExecute()
 //                .map({r -> r.body().string()})

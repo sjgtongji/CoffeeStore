@@ -43,6 +43,15 @@ class OrderDetailActivity : AppCompatActivity() , View.OnClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order_detail)
+        when(intent.getIntExtra(Settings.IS_UNRECEIVE_ORDER_KEY , -1)){
+            Settings.UNRECEIVE_ORDER_VALUE -> {
+                rl_btns.visibility = View.VISIBLE
+            }
+            Settings.RECEIVE_ORDER_VALUE -> {
+                rl_btns.visibility = View.GONE
+            }
+            else ->{}
+        }
         var order : Order? = (application as BaseApplication).order
         formatOrder(order!!)
         binding.data = order

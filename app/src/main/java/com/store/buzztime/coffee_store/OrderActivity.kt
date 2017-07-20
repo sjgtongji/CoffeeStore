@@ -196,10 +196,20 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             }
 
         }
+        var url = Settings.POST_ORDER_STATE_URL
+        var req = OrderReq();
+        if(DEBUG){
+            req.resUUID = application.loginResp!!.resUUID
+            req.orderId = order.orderId
+            req.orderState = Settings.ORDER_STORE_CONFIRM
+        }else{
+            req.resUUID = application.loginResp!!.resUUID
+            req.orderId = order.orderId
+            req.orderState = Settings.ORDER_STORE_CONFIRM
+        }
+//        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_STORE_CONFIRM}"
 
-        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_STORE_CONFIRM}"
-        Log.e(TAG , url)
-        post(url ,  callback)
+        post(url , gson.toJson(req), callback)
     }
 
     fun cancelOrder(order : Order){
@@ -218,8 +228,19 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             }
 
         }
-        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_CANCEL}"
-        post(url ,  callback)
+        var url = Settings.POST_ORDER_STATE_URL
+        var req = OrderReq();
+        if(DEBUG){
+            req.resUUID = application.loginResp!!.resUUID
+            req.orderId = order.orderId
+            req.orderState = Settings.ORDER_CANCEL
+        }else{
+            req.resUUID = application.loginResp!!.resUUID
+            req.orderId = order.orderId
+            req.orderState = Settings.ORDER_CANCEL
+        }
+//        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_CANCEL}"
+        post(url ,  gson.toJson(req) , callback)
     }
     inner class OrderAdapter(val data : List<Order>) : RecyclerView.Adapter<OrderViewHolder>() , View.OnClickListener{
         override fun onClick(v: View?) {
@@ -234,7 +255,13 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 }
                 R.id.ll_order -> {
                     application.order = data.get(v.tag as Int)
-                    pushActivityForResult(OrderDetailActivity::class.java , 1)
+                    var intent = Intent(this@OrderActivity , OrderDetailActivity::class.java)
+                    if(isUnReceive){
+                        intent.putExtra(Settings.IS_UNRECEIVE_ORDER_KEY , Settings.UNRECEIVE_ORDER_VALUE)
+                    }else{
+                        intent.putExtra(Settings.IS_UNRECEIVE_ORDER_KEY , Settings.RECEIVE_ORDER_VALUE)
+                    }
+                    pushActivityForResult(intent , 1)
                 }
                 else -> {Log.d("" , "error")}
             }

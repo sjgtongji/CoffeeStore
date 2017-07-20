@@ -10,8 +10,8 @@ import com.store.buzztime.coffee_store.http.*
  * Created by sjg on 2017/7/19.
  */
 class HttpUtils {
-    fun <T> post(url : String, callback: HttpCallback<T>){
-        var body = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), "{}")
+    fun <T> post(url : String, params : String , callback: HttpCallback<T>){
+        var body = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), params)
         var baseResp : HttpBaseResp = HttpBaseResp();
         url.request().post(body).rxExecute()
                 .map({r -> r.body().string()})
