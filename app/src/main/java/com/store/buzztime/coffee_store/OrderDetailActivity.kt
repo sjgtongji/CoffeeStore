@@ -45,10 +45,12 @@ class OrderDetailActivity : AppCompatActivity() , View.OnClickListener{
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order_detail)
         when(intent.getIntExtra(Settings.IS_UNRECEIVE_ORDER_KEY , -1)){
             Settings.UNRECEIVE_ORDER_VALUE -> {
-                rl_btns.visibility = View.VISIBLE
+                btn_receive.visibility = View.VISIBLE
+                btn_cancel.visibility = View.VISIBLE
             }
             Settings.RECEIVE_ORDER_VALUE -> {
-                rl_btns.visibility = View.GONE
+                btn_receive.visibility = View.GONE
+                btn_cancel.visibility = View.GONE
             }
             else ->{}
         }

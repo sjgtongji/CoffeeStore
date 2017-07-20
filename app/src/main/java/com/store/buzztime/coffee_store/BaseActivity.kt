@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewStub
 import android.view.Window
 import android.widget.RelativeLayout
+import android.widget.Toast
 import com.google.gson.Gson
 import com.squareup.okhttp.RequestBody
 import com.store.buzztime.coffee_store.databinding.ActivityMainBinding
@@ -36,7 +37,7 @@ abstract class BaseActivity : AppCompatActivity() {
     var TAG = this.javaClass.simpleName;
     lateinit protected var dialog: ProgressDialog;
     lateinit protected var context: Context;
-    var DEBUG : Boolean = true
+    var DEBUG : Boolean = false
     var gson : Gson = Gson();
     var http : HttpUtils = HttpUtils()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -224,6 +225,14 @@ abstract class BaseActivity : AppCompatActivity() {
         return format
     }
 
+    fun formatTime(time : String):String{
+        var result : String = time.replace("/Date(", "").replace(")/", "")
+        val time = result.substring(0, result.length - 5)
+        val date = Date(Long.parseLong(time))
+        val format : String = SimpleDateFormat("HH:mm:ss").format(date)
+        return format
+    }
+
     fun formatTimeInOneDay(time : kotlin.Long):String{
         val perHour : kotlin.Int = 3600000
         var hour : kotlin.Long = time.div(perHour)
@@ -233,5 +242,16 @@ abstract class BaseActivity : AppCompatActivity() {
         }else{
             return return hour.toString() + ":" + min.toString()
         }
+    }
+
+    fun showText(text : String){
+        showShort(text)
+    }
+    fun showShort(text : String){
+        Toast.makeText(this, text , Toast.LENGTH_SHORT).show()
+    }
+
+    fun showLong(text : String){
+        Toast.makeText(this, text , Toast.LENGTH_LONG).show()
     }
 }

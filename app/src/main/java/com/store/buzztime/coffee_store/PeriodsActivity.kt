@@ -165,7 +165,7 @@ class PeriodsActivity : BaseActivity(){
             }
 
         }
-        var url = Settings.POST_BUSINESS_HOUR_URL
+        var url = "${Settings.POST_BUSINESS_HOUR_URL}?resUUID=${application.loginResp!!.resUUID}&id=${Id}&state=${isOpen}"
         var req = SetPeriodReq();
         if(DEBUG){
             req.resUUID = application.loginResp!!.resUUID
@@ -177,7 +177,7 @@ class PeriodsActivity : BaseActivity(){
             req.state = isOpen
         }
 //        var url = "${Settings.POST_BUSINESS_HOUR_URL}?resUUID=${application.loginResp!!.resUUID}&id=${Id}&state=${isOpen}"
-        post(url , gson.toJson(req), callback)
+        get(url , callback)
     }
     inner class PeriodNameAdapter(val data : List<Periods>) : RecyclerView.Adapter<PeriodNameHolder>() , View.OnClickListener{
         override fun onClick(v: View?) {

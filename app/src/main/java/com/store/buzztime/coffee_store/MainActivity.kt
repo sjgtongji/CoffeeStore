@@ -54,9 +54,9 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                 // TODO login
                 var address =
                         if(DEBUG){
-                            "${Settings.LOGIN_URL}"
+                            "${Settings.LOGIN_URL}?name=loginname&passWord=password&deviceId=${deviceId}"
                         }else{
-                            "${Settings.LOGIN_URL}";
+                            "${Settings.LOGIN_URL}?name=${name}&passWord=${password}&deviceId=${deviceId}";
                         }
                 var callback = object  : HttpCallback<LoginResp>(LoginResp::class.java){
                     override fun onTestRest(): LoginResp {
@@ -75,7 +75,7 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                     }
 
                 }
-                post(address  ,  gson.toJson(user) , callback);
+                get(address  , callback);
             }
             else -> {}
         }

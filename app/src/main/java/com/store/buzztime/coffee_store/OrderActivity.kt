@@ -116,8 +116,9 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 if(DEBUG){
                     "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10"
                 }else{
-                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=${app.loginResp!!.resUUID}&orderState=${Settings.ORDER_CONFIRM}&startIndex=1&count=10"
+                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=${app.loginResp!!.resUUID}&orderState=${Settings.ORDER_INIT}&startIndex=1&count=10"
                 }
+        Log.e(TAG , url)
         get(url , callback)
     }
 
@@ -133,9 +134,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 
             override fun onSuccess(t: OrderResp?) {
                 Log.d(TAG , "success" + Gson().toJson(t))
-                var app = getApplication() as BaseApplication
-                app.unReceiveOrders = t!!.Items!!;
-                rv_orders.adapter = OrderAdapter(t.Items!!)
+                rv_orders.adapter = OrderAdapter(t!!.Items!!)
 //                pushActivity(OrderActivity::class.java)
             }
 
@@ -156,7 +155,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 
     fun formatOrder(order : Order){
         order.amount = String.format("%.2f", order.payMomey)
-        order.distributeTime = formatDateTime(order.deliveryMinTime) + "-" + formatDateTime(order.deliveryMaxTime)
+        order.distributeTime = formatDateTime(order.deliveryMinTime) + "-" + formatTime(order.deliveryMaxTime)
         order.createTimeShow = formatDateTime(order.createTime)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -196,7 +195,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             }
 
         }
-        var url = Settings.POST_ORDER_STATE_URL
+        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_STORE_CONFIRM}"
         var req = OrderReq();
         if(DEBUG){
             req.resUUID = application.loginResp!!.resUUID
@@ -209,7 +208,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         }
 //        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_STORE_CONFIRM}"
 
-        post(url , gson.toJson(req), callback)
+        get(url , callback)
     }
 
     fun cancelOrder(order : Order){
@@ -228,7 +227,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             }
 
         }
-        var url = Settings.POST_ORDER_STATE_URL
+        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_CANCEL}"
         var req = OrderReq();
         if(DEBUG){
             req.resUUID = application.loginResp!!.resUUID
@@ -240,7 +239,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             req.orderState = Settings.ORDER_CANCEL
         }
 //        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_CANCEL}"
-        post(url ,  gson.toJson(req) , callback)
+        get(url , callback)
     }
     inner class OrderAdapter(val data : List<Order>) : RecyclerView.Adapter<OrderViewHolder>() , View.OnClickListener{
         override fun onClick(v: View?) {
