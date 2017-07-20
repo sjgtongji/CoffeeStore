@@ -18,7 +18,8 @@ import java.util.*
 class BaseApplication : Application() {
     var speechHelper : SpeechHelper? = null
     var loginResp : LoginResp? = null
-    var unReceiveOrders : List<Order>? = null
+    var unReceiveOrders : MutableList<Order> = mutableListOf<Order>()
+    var order : Order? = null
     override fun onCreate() {
         super.onCreate()
         context = this

@@ -57,9 +57,6 @@ class PeriodsActivity : BaseActivity(){
 
             override fun onSuccess(t: PeriodsResp?) {
                 Log.d(TAG , "success" + Gson().toJson(t))
-//                for(resp in t!!){
-//
-//                }
                 periods.clear()
                 var tmpIndex : MutableList<Int> = mutableListOf<Int>()
                 for(resp in t!!.items!!){
@@ -148,6 +145,29 @@ class PeriodsActivity : BaseActivity(){
             else -> return 0
         }
     }
+
+    fun modifyPeriod(period : Period, adapter: PeriodAdapter){
+        var isOpen : Int = if(!period.isOpen) 1 else 0
+        var Id = period.id
+        var callback = object  : HttpCallback<String>(String::class.java){
+            override fun onTestRest(): String {
+                return ""
+            }
+
+            override fun onSuccess(t: String?) {
+                Log.d(TAG , "success" + Gson().toJson(t))
+                period.isOpen = !period.isOpen
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onFail(t: HttpBaseResp?) {
+                Log.e(TAG , t!!.message);
+            }
+
+        }
+        var url = "${Settings.POST_BUSINESS_HOUR_URL}?resUUID=${application.loginResp!!.resUUID}&id=${Id}&state=${isOpen}"
+        post(url ,  callback)
+    }
     inner class PeriodNameAdapter(val data : List<Periods>) : RecyclerView.Adapter<PeriodNameHolder>() , View.OnClickListener{
         override fun onClick(v: View?) {
             when(v!!.id){
@@ -212,8 +232,9 @@ class PeriodsActivity : BaseActivity(){
             when(v!!.id){
                 R.id.rl_period -> {
                     val index : Int = v.tag as Int;
-                    data[index].isOpen = !data[index].isOpen
-                    this.notifyDataSetChanged()
+                    modifyPeriod(data[index] , this)
+//                    data[index].isOpen = !data[index].isOpen
+//                    this.notifyDataSetChanged()
                 }
                 else -> {}
             }

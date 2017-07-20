@@ -52,9 +52,6 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                         }else{
                             "${Settings.LOGIN_URL}?name=${name}&passWord=${password}&deviceId=${deviceId}";
                         }
-                var body = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), Gson().toJson(user))
-
-                Log.d(TAG , address)
                 var callback = object  : HttpCallback<LoginResp>(LoginResp::class.java){
                     override fun onTestRest(): LoginResp {
                         return LoginResp();
@@ -72,7 +69,7 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                     }
 
                 }
-                post(address ,body ,  callback);
+                post(address  ,  callback);
             }
             else -> {}
         }

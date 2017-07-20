@@ -54,6 +54,17 @@ class Order{
     var distributionName : String = "李某";
 
     var address : Address? = null;
-    var listCOrderCommodityRelation : List<Product> = listOf<Product>();
-    var createTimeShow : String = "";
+    var listCOrderCommodityRelation : MutableList<Product> = mutableListOf<Product>();
+    var createTimeShow : String = ""
+    var orderMoneyShow : String = ""
+    var payMoneyShow : String = ""
+    var couponMoneyShow : String = ""
+    var serviceFeeShow : String = ""
+    override fun equals(other: Any?): Boolean {
+        if(other is Order){
+            var otherOrder : Order = other as Order
+            return this.orderId == otherOrder.orderId && this.orderUUID.equals(otherOrder.orderUUID)
+        }
+        return false
+    }
 }

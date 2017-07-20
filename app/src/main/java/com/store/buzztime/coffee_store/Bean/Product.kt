@@ -19,5 +19,7 @@ class Product {
     var quantity : Int  = 0;
     var updateName : String  = "";
     var updateTime : String  = "";
+    var amountShow : String = ""
+    var quantityShow : String = ""
 
 }

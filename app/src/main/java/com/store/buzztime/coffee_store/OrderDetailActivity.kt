@@ -1,0 +1,72 @@
+package com.store.buzztime.coffee_store
+
+import android.databinding.DataBindingUtil
+import android.databinding.ViewDataBinding
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.store.buzztime.coffee_store.Bean.Order
+import com.store.buzztime.coffee_store.Bean.Product
+import com.store.buzztime.coffee_store.databinding.ActivityOrderDetailBinding
+import kotlinx.android.synthetic.main.activity_order_detail.*
+
+/**
+ * Created by sjg on 2017/7/19.
+ */
+class OrderDetailActivity : AppCompatActivity(){
+    lateinit var binding : ActivityOrderDetailBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_order_detail)
+        var order : Order? = (application as BaseApplication).order
+        formatOrder(order!!)
+        binding.data = order
+        lv_product.layoutManager = GridLayoutManager(this,1)
+        lv_product.adapter = OrderDetailAdapter(order.listCOrderCommodityRelation)
+    }
+
+    fun formatOrder(order : Order){
+        order.orderMoneyShow = String.format("%.2f", order.orderMomey)
+        order.payMoneyShow = String.format("%.2f", order.payMomey)
+        order.couponMoneyShow = String.format("%.2f", order.orderMomey - order.payMomey)
+        order.serviceFeeShow = String.format("%.2f", order.serverFee)
+        var tmp = order.listCOrderCommodityRelation.get(0)
+        for(product in order.listCOrderCommodityRelation){
+            product.amountShow = String.format("%.2f", product.price * product.quantity)
+            product.quantityShow = product.quantity.toString()
+        }
+    }
+
+    inner class OrderDetailAdapter(val data : List<Product>) : RecyclerView.Adapter<OrderDetailViewHolder>(){
+
+
+        override fun onBindViewHolder(p0: OrderDetailViewHolder, p1: Int) {
+            p0.bind(data[p1]);
+        }
+
+        override fun onCreateViewHolder(p0: ViewGroup, p1: Int): OrderDetailViewHolder {
+            val layoutInflater = LayoutInflater.from(p0.context)
+            val binding: ViewDataBinding =
+                    DataBindingUtil.inflate(layoutInflater, R.layout.adapter_order_detail, p0, false)
+
+            val holder = OrderDetailViewHolder(binding);
+            return holder
+        }
+
+        override fun getItemCount(): Int {
+            return data.size;
+        }
+
+    }
+
+    inner class OrderDetailViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(data : Any){
+            binding.setVariable(BR.data , data)
+            binding.executePendingBindings()
+        }
+    }
+}

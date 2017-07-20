@@ -4,6 +4,7 @@
         <variable name="data" type="com.store.buzztime.coffee_store.Bean.Order" />
     </data>
     <LinearLayout
+        android:id="@+id/ll_order"
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_vertical_margin"

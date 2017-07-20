@@ -1,8 +1,13 @@
 package com.store.buzztime.coffee_store
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -10,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import com.google.gson.Gson
 import com.store.buzztime.coffee_store.Bean.Order
 import com.store.buzztime.coffee_store.databinding.AdapterOrderBinding
@@ -27,9 +33,12 @@ import org.jetbrains.anko.textColor
  * Created by sjg on 2017/6/27.
  */
 class OrderActivity : BaseActivity(), View.OnClickListener{
+    var orderReceiver : OrderReciver ? = null
+    var isUnReceive : Boolean = true
     override fun onClick(p0: View?) {
         when(p0!!.id){
             R.id.rl_unfinish -> {
+                isUnReceive = true
                 tv_unfinish.textColor = resources.getColor(R.color.text_yellow)
                 view_unfinish.backgroundColor = resources.getColor(R.color.text_yellow)
                 tv_finish.textColor = resources.getColor(R.color.black)
@@ -37,6 +46,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 getUnreceiveOrders()
             }
             R.id.rl_finish -> {
+                isUnReceive = false
                 tv_unfinish.textColor = resources.getColor(R.color.black)
                 view_unfinish.backgroundColor = resources.getColor(R.color.bg_white)
                 tv_finish.textColor = resources.getColor(R.color.text_yellow)
@@ -59,7 +69,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         navigationBar.rightBtn.text = "配送时间"
         navigationBar.rightBtn.setOnClickListener(this)
 //        rv_orders.adapter = OrderAdapter(orders)
-        rv_orders.layoutManager = GridLayoutManager(this, 1)
+        rv_orders.layoutManager = GridLayoutManager(this, 2)
     }
 
     override fun initEvents() {
@@ -69,7 +79,12 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 
     override fun initDatas(view: View) {
 //        showDialog()
-        getUnreceiveOrders();
+        getUnreceiveOrders()
+        SyncService().actionStart(this)
+        orderReceiver = OrderReciver()
+        var filter : IntentFilter = IntentFilter();
+        filter.addAction(Settings.ACTION_ORDER)
+        LocalBroadcastManager.getInstance(this).registerReceiver(orderReceiver , filter)
     }
 
     fun getUnreceiveOrders(){
@@ -84,7 +99,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 for(order in t!!.Items!!){
                     formatOrder(order)
                 }
-                app.unReceiveOrders = t!!.Items;
+                app.unReceiveOrders = t!!.Items!!;
                 rv_orders.adapter = OrderAdapter(t.Items!!)
 
 //                pushActivity(OrderActivity::class.java)
@@ -105,6 +120,10 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         get(url , callback)
     }
 
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(orderReceiver)
+        super.onDestroy()
+    }
     fun getReceiverOrders(){
         var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
             override fun onTestRest(): OrderResp {
@@ -114,7 +133,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             override fun onSuccess(t: OrderResp?) {
                 Log.d(TAG , "success" + Gson().toJson(t))
                 var app = getApplication() as BaseApplication
-                app.unReceiveOrders = t!!.Items;
+                app.unReceiveOrders = t!!.Items!!;
                 rv_orders.adapter = OrderAdapter(t.Items!!)
 //                pushActivity(OrderActivity::class.java)
             }
@@ -144,14 +163,61 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         super.setContentView(R.layout.activity_order)
     }
 
-    class OrderAdapter(val data : List<Order>) : RecyclerView.Adapter<OrderViewHolder>() , View.OnClickListener{
+    fun receiveOrder(order : Order){
+        var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
+            override fun onTestRest(): OrderResp {
+                return OrderResp()
+            }
+
+            override fun onSuccess(t: OrderResp?) {
+                Log.d(TAG , "success" + Gson().toJson(t))
+                rl_unfinish.performClick()
+            }
+
+            override fun onFail(t: HttpBaseResp?) {
+                Log.e(TAG , t!!.message);
+            }
+
+        }
+
+        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_STORE_CONFIRM}"
+        Log.e(TAG , url)
+        post(url ,  callback)
+    }
+
+    fun cancelOrder(order : Order){
+        var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
+            override fun onTestRest(): OrderResp {
+                return OrderResp()
+            }
+
+            override fun onSuccess(t: OrderResp?) {
+                Log.d(TAG , "success" + Gson().toJson(t))
+                rl_unfinish.performClick()
+            }
+
+            override fun onFail(t: HttpBaseResp?) {
+                Log.e(TAG , t!!.message);
+            }
+
+        }
+        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_CANCEL}"
+        post(url ,  callback)
+    }
+    inner class OrderAdapter(val data : List<Order>) : RecyclerView.Adapter<OrderViewHolder>() , View.OnClickListener{
         override fun onClick(v: View?) {
             when(v!!.id){
                 R.id.btn_receive -> {
                     Log.d("" , "receive" + v.tag)
+                    receiveOrder(data.get(v.tag as Int))
                 }
                 R.id.btn_cancel -> {
                     Log.d("" , "cancel" + v.tag)
+                    cancelOrder(data.get(v.tag as Int))
+                }
+                R.id.ll_order -> {
+                    application.order = data.get(v.tag as Int)
+                    pushActivity(OrderDetailActivity::class.java)
                 }
                 else -> {Log.d("" , "error")}
             }
@@ -163,6 +229,12 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             p0.btn_receive.setTag(p1)
             p0.btn_cancel.setOnClickListener(this)
             p0.btn_cancel.setTag(p1)
+            p0.ll_order.setOnClickListener(this)
+            p0.ll_order.setTag(p1)
+            if(!isUnReceive){
+                p0.btn_receive.visibility = View.GONE
+                p0.btn_cancel.visibility = View.GONE
+            }
             p0.bind(data[p1]);
         }
 
@@ -181,16 +253,24 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 
     }
 
-    class OrderViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class OrderViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root){
         var btn_receive : Button
         var btn_cancel : Button
+        var ll_order : LinearLayout
         init {
             btn_receive = binding.root.findViewById(R.id.btn_receive) as Button
             btn_cancel = binding.root.findViewById(R.id.btn_cancel) as Button
+            ll_order = binding.root.findViewById(R.id.ll_order) as LinearLayout
         }
         fun bind(data : Any){
             binding.setVariable(BR.data , data)
             binding.executePendingBindings()
+        }
+    }
+
+    inner class OrderReciver : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            rl_unfinish.performClick()
         }
     }
 }
