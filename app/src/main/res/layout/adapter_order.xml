@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="data" type="com.store.buzztime.coffee_store.Bean.Order" />
+        <variable name="address" type="com.store.buzztime.coffee_store.Bean.Address" />
     </data>
     <LinearLayout
         android:id="@+id/ll_order"
@@ -107,6 +108,28 @@
                 android:text="配送时间:"/>
             <TextView
                 android:id="@+id/tv_delivery_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/gray_text_content"
+                android:text="@{address.telephone}"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/bg_gray"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"></View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/gray_text_content"
+                android:text="电话:"/>
+            <TextView
+                android:id="@+id/tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/gray_text_content"

@@ -71,7 +71,7 @@ class PeriodsActivity : BaseActivity(){
                             tmpPeriods = periods.get(tmpIndex.indexOf(period.WeekDay))
                         }
                         var tmpPeriod = Period()
-                        tmpPeriod.isOpen = if(period.State == 1) true else false
+                        tmpPeriod.isOpen = if(period.State == 1) false else true
                         tmpPeriod.id = period.id
                         tmpPeriod.sortIndex = period.SortIndex
                         tmpPeriod.name = formatTimeInOneDay(period.StartTime) + "-" + formatTimeInOneDay(period.EndTime)

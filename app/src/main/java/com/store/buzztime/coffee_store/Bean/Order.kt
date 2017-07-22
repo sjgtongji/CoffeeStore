@@ -23,7 +23,7 @@ class Order{
     var memberAddressUUID : String ="";
     var memberUUID : String ="";
     var messageStatus : String ="";
-    var orderId : Int = 0;
+    var orderId : String = "";
     var orderState : Int = 0;
     var orderTime : String ="";
     var orderUUID : String ="";
@@ -63,7 +63,7 @@ class Order{
     override fun equals(other: Any?): Boolean {
         if(other is Order){
             var otherOrder : Order = other as Order
-            return this.orderId == otherOrder.orderId && this.orderUUID.equals(otherOrder.orderUUID)
+            return this.orderId.equals(otherOrder.orderId)  && this.orderUUID.equals(otherOrder.orderUUID)
         }
         return false
     }

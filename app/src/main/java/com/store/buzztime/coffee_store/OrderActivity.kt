@@ -85,7 +85,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         orderReceiver = OrderReciver()
         var filter : IntentFilter = IntentFilter();
         filter.addAction(Settings.ACTION_ORDER)
-        LocalBroadcastManager.getInstance(this).registerReceiver(orderReceiver , filter)
+        registerReceiver(orderReceiver , filter)
     }
 
     fun getUnreceiveOrders(){
@@ -123,7 +123,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     override fun onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(orderReceiver)
+        unregisterReceiver(orderReceiver)
         super.onDestroy()
     }
     fun getReceiverOrders(){
@@ -180,12 +180,12 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     fun receiveOrder(order : Order){
-        var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
-            override fun onTestRest(): OrderResp {
-                return OrderResp()
+        var callback = object  : HttpCallback<Boolean>(Boolean::class.java){
+            override fun onTestRest(): Boolean {
+                return false
             }
 
-            override fun onSuccess(t: OrderResp?) {
+            override fun onSuccess(t: Boolean?) {
                 Log.d(TAG , "success" + Gson().toJson(t))
                 rl_unfinish.performClick()
             }
@@ -195,29 +195,29 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             }
 
         }
-        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_STORE_CONFIRM}"
-        var req = OrderReq();
-        if(DEBUG){
-            req.resUUID = application.loginResp!!.resUUID
-            req.orderId = order.orderId
-            req.orderState = Settings.ORDER_STORE_CONFIRM
-        }else{
-            req.resUUID = application.loginResp!!.resUUID
-            req.orderId = order.orderId
-            req.orderState = Settings.ORDER_STORE_CONFIRM
-        }
+        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.id}&orderState=${Settings.ORDER_STORE_CONFIRM}"
+//        var req = OrderReq();
+//        if(DEBUG){
+//            req.resUUID = application.loginResp!!.resUUID
+//            req.orderId = order.orderId
+//            req.orderState = Settings.ORDER_STORE_CONFIRM
+//        }else{
+//            req.resUUID = application.loginResp!!.resUUID
+//            req.orderId = order.orderId
+//            req.orderState = Settings.ORDER_STORE_CONFIRM
+//        }
 //        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_STORE_CONFIRM}"
 
         get(url , callback)
     }
 
     fun cancelOrder(order : Order){
-        var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
-            override fun onTestRest(): OrderResp {
-                return OrderResp()
+        var callback = object  : HttpCallback<Boolean>(Boolean::class.java){
+            override fun onTestRest(): Boolean {
+                return false
             }
 
-            override fun onSuccess(t: OrderResp?) {
+            override fun onSuccess(t: Boolean?) {
                 Log.d(TAG , "success" + Gson().toJson(t))
                 rl_unfinish.performClick()
             }
@@ -227,17 +227,17 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             }
 
         }
-        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_CANCEL}"
-        var req = OrderReq();
-        if(DEBUG){
-            req.resUUID = application.loginResp!!.resUUID
-            req.orderId = order.orderId
-            req.orderState = Settings.ORDER_CANCEL
-        }else{
-            req.resUUID = application.loginResp!!.resUUID
-            req.orderId = order.orderId
-            req.orderState = Settings.ORDER_CANCEL
-        }
+        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.id}&orderState=${Settings.ORDER_CANCEL}"
+//        var req = OrderReq();
+//        if(DEBUG){
+//            req.resUUID = application.loginResp!!.resUUID
+//            req.orderId = order.orderId
+//            req.orderState = Settings.ORDER_CANCEL
+//        }else{
+//            req.resUUID = application.loginResp!!.resUUID
+//            req.orderId = order.orderId
+//            req.orderState = Settings.ORDER_CANCEL
+//        }
 //        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_CANCEL}"
         get(url , callback)
     }
@@ -307,12 +307,14 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         }
         fun bind(data : Any){
             binding.setVariable(BR.data , data)
+            binding.setVariable(BR.address , (data as Order).address)
             binding.executePendingBindings()
         }
     }
 
     inner class OrderReciver : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
+            Log.e(TAG , "新订单")
             rl_unfinish.performClick()
         }
     }
