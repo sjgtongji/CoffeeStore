@@ -34,51 +34,49 @@ class MainActivity : BaseActivity() , View.OnClickListener{
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.btn_login -> {
-//                val app = getApplication() as BaseApplication;
-//                app.speechHelper.startSpeaking("您有新的订单")
-//                (getApplication() as BaseApplication).speechHelper!!.startSpeaking("您有新的订单")
-//                showDialog();
                 var name : String = et_name.text.toString();
                 var password : String = et_password.text.toString();
-                var telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager;
-                var deviceId = android.os.Build.SERIAL
 
-                if(DEBUG){
-                    user.name = "loginname"
-                    user.passWord = "password"
-                }else{
-                    user.name = name
-                    user.passWord = password
-                }
-                user.deviceId = deviceId
-                // TODO login
-                var address =
-                        if(DEBUG){
-                            "${Settings.LOGIN_URL}?name=loginname&passWord=password&deviceId=${deviceId}"
-                        }else{
-                            "${Settings.LOGIN_URL}?name=${name}&passWord=${password}&deviceId=${deviceId}";
-                        }
-                var callback = object  : HttpCallback<LoginResp>(LoginResp::class.java){
-                    override fun onTestRest(): LoginResp {
-                        return LoginResp();
-                    }
+                login(name , password)
 
-                    override fun onSuccess(t: LoginResp?) {
-//                        Log.d(TAG , "success" + Gson().toJson(t))
-                        val app = getApplication() as BaseApplication
-                        app.loginResp = t
-                        pushActivity(OrderActivity::class.java , true)
-                    }
-
-                    override fun onFail(t: HttpBaseResp?) {
-                        Log.e(TAG , t!!.message);
-                    }
-
-                }
-                get(address  , callback);
             }
             else -> {}
         }
+    }
+
+    fun login(name : String , password : String){
+        showDialog()
+        var telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager;
+        var deviceId = android.os.Build.SERIAL
+        var address =
+                if(DEBUG){
+                    "${Settings.LOGIN_URL}?name=loginname&passWord=password&deviceId=${deviceId}"
+                }else{
+                    "${Settings.LOGIN_URL}?name=${name}&passWord=${password}&deviceId=${deviceId}";
+                }
+        var callback = object  : HttpCallback<LoginResp>(LoginResp::class.java){
+            override fun onTestRest(): LoginResp {
+                hideDialog()
+                return LoginResp();
+            }
+
+            override fun onSuccess(t: LoginResp?) {
+                hideDialog()
+                val app = getApplication() as BaseApplication
+                app.loginResp = t
+                PrefUtils().putString(this@MainActivity, Settings.NAME_KEY , name)
+                PrefUtils().putString(this@MainActivity, Settings.PWD_KEY , password)
+                pushActivity(OrderActivity::class.java , true)
+            }
+
+            override fun onFail(t: HttpBaseResp?) {
+                hideDialog()
+                showText(t!!.message)
+                Log.e(TAG , t!!.message);
+            }
+
+        }
+        get(address  , callback);
     }
 
     var user : User = User();
@@ -118,6 +116,11 @@ class MainActivity : BaseActivity() , View.OnClickListener{
     override fun initDatas(view : View) {
         dataBind = DataBindingUtil.bind(view , null);
         dataBind.data = user;
+        var name = PrefUtils().getString(this, Settings.NAME_KEY , "")
+        var password = PrefUtils().getString(this, Settings.PWD_KEY , "")
+        if(name != null && !name.isEmpty() && password != null && !password.isEmpty()){
+            login(name , password)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

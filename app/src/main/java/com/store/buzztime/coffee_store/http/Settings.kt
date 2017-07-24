@@ -6,6 +6,8 @@ package com.store.buzztime.coffee_store.http
 
 class Settings{
     companion object{
+        var NAME_KEY : String = "com.store.buzztime.coffee_store.http.name"
+        var PWD_KEY : String = "com.store.buzztime.coffee_store.http.password"
         //0:未确认；1：已确认；2：取消；3：已配送；4：已完成；5：门店接单；6：骑手取餐；7：骑手送餐中
         var ORDER_INIT : Int = 0
         var ORDER_CONFIRM : Int = 1
@@ -24,6 +26,9 @@ class Settings{
         var RECEIVE_ORDER_VALUE : Int = 2
         var ORDER_OPERATION_CONFIRM : Int = 1
         var ORDER_OPERATION_CANCEL : Int = 2
+
+        var DIALOG_TITLE_KEY : String = "com.store.buzztime.coffee_store.http.dialogtitle"
+        var DIALOG_REQUEST_CODE : Int = 100
         var DEBUG : Boolean = true;
         var TEST_REST : Boolean = false;
         var SERVER_DEBUG = "http://139.196.228.248:52072/Rest/CoffeeService/"

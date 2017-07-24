@@ -53,9 +53,15 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 tv_finish.textColor = resources.getColor(R.color.text_yellow)
                 view_finish.backgroundColor = resources.getColor(R.color.text_yellow)
                 getReceiverOrders()
+
             }
             R.id.activity_frame_title_btn_right -> {
                 pushActivity(PeriodsActivity::class.java)
+            }
+            R.id.activity_frame_title_btn_left -> {
+                PrefUtils().putString(this@OrderActivity , Settings.NAME_KEY , "")
+                PrefUtils().putString(this@OrderActivity , Settings.PWD_KEY , "")
+                pushActivity(MainActivity::class.java , true)
             }
             else -> {
 
@@ -64,11 +70,12 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     override fun initViews() {
-        navigationBar.setTitle("南京西路店")
-        navigationBar.hiddenLeftButton()
+        navigationBar.setTitle(application.loginResp!!.name)
+        navigationBar.displayLeftButton()
         navigationBar.displayRightButton()
         navigationBar.rightBtn.text = "配送时间"
         navigationBar.rightBtn.setOnClickListener(this)
+        navigationBar.leftBtn.setOnClickListener(this)
 //        rv_orders.adapter = OrderAdapter(orders)
         rv_orders.layoutManager = GridLayoutManager(this, 2)
     }
@@ -89,12 +96,15 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     fun getUnreceiveOrders(){
+        showDialog()
         var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
             override fun onTestRest(): OrderResp {
+                hideDialog()
                 return OrderResp()
             }
 
             override fun onSuccess(t: OrderResp?) {
+                hideDialog()
                 Log.d(TAG , "success" + Gson().toJson(t))
                 var app = getApplication() as BaseApplication
                 for(order in t!!.Items!!){
@@ -107,6 +117,8 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             }
 
             override fun onFail(t: HttpBaseResp?) {
+                hideDialog()
+                showText(t!!.message)
                 Log.e(TAG , t!!.message);
             }
 
@@ -127,18 +139,26 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         super.onDestroy()
     }
     fun getReceiverOrders(){
+        showDialog()
         var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
             override fun onTestRest(): OrderResp {
+                hideDialog()
                 return OrderResp()
             }
 
             override fun onSuccess(t: OrderResp?) {
+                hideDialog()
                 Log.d(TAG , "success" + Gson().toJson(t))
+                for(order in t!!.Items!!){
+                    formatOrder(order)
+                }
                 rv_orders.adapter = OrderAdapter(t!!.Items!!)
 //                pushActivity(OrderActivity::class.java)
             }
 
             override fun onFail(t: HttpBaseResp?) {
+                hideDialog()
+                showText(t!!.message)
                 Log.e(TAG , t!!.message);
             }
 
@@ -169,10 +189,26 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             when(requestCode){
                 1 -> {
                     when(data!!.getIntExtra(Settings.ORDER_OPERATION_KEY , -1)){
-                        Settings.ORDER_OPERATION_CONFIRM -> receiveOrder(application.order!!)
-                        Settings.ORDER_OPERATION_CANCEL -> cancelOrder(application.order!!)
+                        Settings.ORDER_OPERATION_CONFIRM -> {
+                            showConfirmDialog(102 , "确定要接此订单?")
+                        }
+                        Settings.ORDER_OPERATION_CANCEL -> {
+                            showConfirmDialog(103 , "确定要取消此订单?")
+                        }
                         else -> {}
                     }
+                }
+                100 -> {
+                    receiveOrder(toReceive!!)
+                }
+                101 -> {
+                    cancelOrder(toCancel!!)
+                }
+                102 -> {
+                    receiveOrder(application.order!!)
+                }
+                103 -> {
+                    cancelOrder(application.order!!)
                 }
                 else ->{}
             }
@@ -180,17 +216,22 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     fun receiveOrder(order : Order){
+        showDialog()
         var callback = object  : HttpCallback<Boolean>(Boolean::class.java){
             override fun onTestRest(): Boolean {
+                hideDialog()
                 return false
             }
 
             override fun onSuccess(t: Boolean?) {
                 Log.d(TAG , "success" + Gson().toJson(t))
+                hideDialog()
                 rl_unfinish.performClick()
             }
 
             override fun onFail(t: HttpBaseResp?) {
+                hideDialog()
+                showText(t!!.message)
                 Log.e(TAG , t!!.message);
             }
 
@@ -212,17 +253,22 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     fun cancelOrder(order : Order){
+        showDialog()
         var callback = object  : HttpCallback<Boolean>(Boolean::class.java){
             override fun onTestRest(): Boolean {
+                hideDialog()
                 return false
             }
 
             override fun onSuccess(t: Boolean?) {
+                hideDialog()
                 Log.d(TAG , "success" + Gson().toJson(t))
                 rl_unfinish.performClick()
             }
 
             override fun onFail(t: HttpBaseResp?) {
+                hideDialog()
+                showText(t!!.message)
                 Log.e(TAG , t!!.message);
             }
 
@@ -241,16 +287,22 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 //        var url = "${Settings.POST_ORDER_STATE_URL}?resUUID=${application.loginResp!!.resUUID}&orderId=${order.orderId}&orderState=${Settings.ORDER_CANCEL}"
         get(url , callback)
     }
+
+    var toReceive : Order? = null
+    var toCancel : Order? = null
     inner class OrderAdapter(val data : List<Order>) : RecyclerView.Adapter<OrderViewHolder>() , View.OnClickListener{
         override fun onClick(v: View?) {
             when(v!!.id){
                 R.id.btn_receive -> {
                     Log.d("" , "receive" + v.tag)
-                    receiveOrder(data.get(v.tag as Int))
+                    toReceive = data.get(v.tag as Int)
+                    showConfirmDialog(100 , "确定要接此订单?")
+//                    receiveOrder()
                 }
                 R.id.btn_cancel -> {
                     Log.d("" , "cancel" + v.tag)
-                    cancelOrder(data.get(v.tag as Int))
+                    toCancel = data.get(v.tag as Int)
+                    showConfirmDialog(101 , "确定要取消此订单?")
                 }
                 R.id.ll_order -> {
                     application.order = data.get(v.tag as Int)

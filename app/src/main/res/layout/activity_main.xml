@@ -9,7 +9,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.store.buzztime.coffee_store.MainActivity">
+        tools:context="com.store.buzztime.coffee_store.MainActivity"
+        android:background="@mipmap/login_background">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,7 +43,7 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="30dp">
                 <ImageView
                     android:id="@+id/iv_password"
                     android:layout_width="wrap_content"
@@ -56,7 +57,8 @@
                     android:layout_height="wrap_content"
                     style="@style/black_text_s"
                     android:layout_centerVertical="true"
-                    android:hint="@string/hint_password" />
+                    android:hint="@string/hint_password"
+                    android:inputType="textPassword"/>
             </RelativeLayout>
             <Button
                 android:id="@+id/btn_login"
@@ -64,7 +66,7 @@
                 android:layout_height="@dimen/btn_height"
                 style="@style/yellow_btn"
                 android:text="@string/login"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="30dp"/>
         </LinearLayout>
         <!--<TextView-->
             <!--android:id="@+id/tv_main"-->

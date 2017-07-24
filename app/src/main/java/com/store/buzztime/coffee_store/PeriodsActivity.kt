@@ -50,12 +50,15 @@ class PeriodsActivity : BaseActivity(){
     }
 
     override fun initDatas(view: View) {
+        showDialog()
         var callback = object  : HttpCallback<PeriodsResp>(PeriodsResp::class.java){
             override fun onTestRest(): PeriodsResp {
+                hideDialog()
                 return PeriodsResp()
             }
 
             override fun onSuccess(t: PeriodsResp?) {
+                hideDialog()
                 Log.d(TAG , "success" + Gson().toJson(t))
                 periods.clear()
                 var tmpIndex : MutableList<Int> = mutableListOf<Int>()
@@ -101,6 +104,8 @@ class PeriodsActivity : BaseActivity(){
             }
 
             override fun onFail(t: HttpBaseResp?) {
+                hideDialog()
+                showText(t!!.message)
                 Log.e(TAG , t!!.message);
             }
 
@@ -147,35 +152,41 @@ class PeriodsActivity : BaseActivity(){
     }
 
     fun modifyPeriod(period : Period, adapter: PeriodAdapter){
-        var isOpen : Int = if(!period.isOpen) 1 else 0
+        showDialog()
+        var isOpen : Int = if(!period.isOpen) 0 else 1
         var Id = period.id
         var callback = object  : HttpCallback<String>(String::class.java){
             override fun onTestRest(): String {
+                hideDialog()
                 return ""
             }
 
             override fun onSuccess(t: String?) {
+                hideDialog()
                 Log.d(TAG , "success" + Gson().toJson(t))
                 period.isOpen = !period.isOpen
                 adapter.notifyDataSetChanged()
             }
 
             override fun onFail(t: HttpBaseResp?) {
+                hideDialog()
+                showText(t!!.message)
                 Log.e(TAG , t!!.message);
             }
 
         }
         var url = "${Settings.POST_BUSINESS_HOUR_URL}?resUUID=${application.loginResp!!.resUUID}&id=${Id}&state=${isOpen}"
-        var req = SetPeriodReq();
-        if(DEBUG){
-            req.resUUID = application.loginResp!!.resUUID
-            req.id = Id
-            req.state = isOpen
-        }else{
-            req.resUUID = application.loginResp!!.resUUID
-            req.id = Id
-            req.state = isOpen
-        }
+//        var req = SetPeriodReq();
+//        if(DEBUG){
+//            req.resUUID = application.loginResp!!.resUUID
+//            req.id = Id
+//            req.state = isOpen
+//        }else{
+//            req.resUUID = application.loginResp!!.resUUID
+//            req.id = Id
+//            req.state = isOpen
+//        }
+        Log.e(TAG , url)
 //        var url = "${Settings.POST_BUSINESS_HOUR_URL}?resUUID=${application.loginResp!!.resUUID}&id=${Id}&state=${isOpen}"
         get(url , callback)
     }

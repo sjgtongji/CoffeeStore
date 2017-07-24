@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/gray_text_content"
-                android:text="@{address.telephone}"/>
+                android:text="@{data.distributeTime}"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
@@ -133,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/gray_text_content"
-                android:text="@{data.distributeTime}"/>
+                android:text="@{address.telephone}"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
