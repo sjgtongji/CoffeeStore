@@ -66,6 +66,7 @@ class MainActivity : BaseActivity() , View.OnClickListener{
                 app.loginResp = t
                 PrefUtils().putString(this@MainActivity, Settings.NAME_KEY , name)
                 PrefUtils().putString(this@MainActivity, Settings.PWD_KEY , password)
+                PrefUtils().putString(this@MainActivity, Settings.RES_ID_KEY , t!!.resUUID)
                 pushActivity(OrderActivity::class.java , true)
             }
 

@@ -188,9 +188,13 @@ class SyncService : Service() {
             }
 
         }
-        var url = "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=${(application as BaseApplication).loginResp!!.resUUID}&orderState=${Settings.ORDER_INIT}&startIndex=1&count=10"
-        Log.e(TAG , url)
-        http.get(url , callback)
+        var resId = PrefUtils().getString(this, Settings.RES_ID_KEY , "")
+        if(resId != null && !resId.isEmpty()){
+            var url = "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=${resId}&orderState=${Settings.ORDER_INIT}&startIndex=1&count=10"
+            Log.e(TAG , url)
+            http.get(url , callback)
+        }
+
 //        var app = getApplication() as BaseApplication
 //        var url =
 //                if(DEBUG){
