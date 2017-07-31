@@ -37,6 +37,8 @@ class SyncService : Service() {
 
     private val http : HttpUtils = HttpUtils()
 
+    val speechHelper : SpeechHelper = SpeechHelper(this)
+
     /**
      * 启动服务
 
@@ -174,7 +176,9 @@ class SyncService : Service() {
                 var app = getApplication() as BaseApplication
                 for(order in t!!.Items!!){
                     if(!app.unReceiveOrders!!.contains(order)){
-                        sendBroadcast(Intent(this@SyncService, NewOrderReceiver::class.java))
+                        speechHelper.startSpeaking("您有新的订单")
+                        sendBroadcast(Intent(Settings.ACTION_ORDER))
+//                        sendBroadcast(Intent(this@SyncService, NewOrderReceiver::class.java))
                         break;
                     }
                 }

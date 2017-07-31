@@ -44,6 +44,9 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 view_unfinish.backgroundColor = resources.getColor(R.color.text_yellow)
                 tv_finish.textColor = resources.getColor(R.color.black)
                 view_finish.backgroundColor = resources.getColor(R.color.bg_white)
+                tv_history.textColor = resources.getColor(R.color.black)
+                view_finish.backgroundColor = resources.getColor(R.color.bg_white)
+                rl_search.visibility = View.GONE
                 getUnreceiveOrders()
             }
             R.id.rl_finish -> {
@@ -52,8 +55,29 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 view_unfinish.backgroundColor = resources.getColor(R.color.bg_white)
                 tv_finish.textColor = resources.getColor(R.color.text_yellow)
                 view_finish.backgroundColor = resources.getColor(R.color.text_yellow)
+                tv_history.textColor = resources.getColor(R.color.black)
+                view_history.backgroundColor = resources.getColor(R.color.bg_white)
+                rl_search.visibility = View.GONE
                 getReceiverOrders()
 
+            }
+            R.id.rl_history -> {
+                isUnReceive = false
+                tv_unfinish.textColor = resources.getColor(R.color.black)
+                view_unfinish.backgroundColor = resources.getColor(R.color.bg_white)
+                tv_finish.textColor = resources.getColor(R.color.black)
+                view_finish.backgroundColor = resources.getColor(R.color.bg_white)
+                tv_history.textColor = resources.getColor(R.color.text_yellow)
+                view_history.backgroundColor = resources.getColor(R.color.text_yellow)
+                rl_search.visibility = View.VISIBLE
+            }
+            R.id.iv_search -> {
+                var content : String = et_search.text.toString()
+                if(content == null || content.isEmpty()){
+                    showText("搜索内容不能为空")
+                    return
+                }
+                getHistory(content)
             }
             R.id.activity_frame_title_btn_right -> {
                 pushActivity(PeriodsActivity::class.java)
@@ -84,6 +108,8 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     override fun initEvents() {
         rl_unfinish.setOnClickListener(this)
         rl_finish.setOnClickListener(this)
+        rl_history.setOnClickListener(this)
+        iv_search.setOnClickListener(this)
     }
 
     override fun initDatas(view: View) {
@@ -138,6 +164,10 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     override fun onDestroy() {
         unregisterReceiver(orderReceiver)
         super.onDestroy()
+    }
+
+    fun getHistory(content : String){
+        //TODO 获取历史订单
     }
     fun getReceiverOrders(){
         showDialog()
