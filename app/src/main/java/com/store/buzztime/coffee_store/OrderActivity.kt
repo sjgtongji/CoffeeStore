@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -120,6 +121,17 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         var filter : IntentFilter = IntentFilter();
         filter.addAction(Settings.ACTION_ORDER)
         registerReceiver(orderReceiver , filter)
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (event!!.keyCode == KeyEvent.KEYCODE_BACK) {
+            val home = Intent(Intent.ACTION_MAIN)
+            home.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            home.addCategory(Intent.CATEGORY_HOME)
+            startActivity(home)
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     fun getUnreceiveOrders(){
