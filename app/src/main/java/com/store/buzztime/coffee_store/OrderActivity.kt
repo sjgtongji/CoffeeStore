@@ -46,7 +46,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 tv_finish.textColor = resources.getColor(R.color.black)
                 view_finish.backgroundColor = resources.getColor(R.color.bg_white)
                 tv_history.textColor = resources.getColor(R.color.black)
-                view_finish.backgroundColor = resources.getColor(R.color.bg_white)
+                view_history.backgroundColor = resources.getColor(R.color.bg_white)
                 rl_search.visibility = View.GONE
                 getUnreceiveOrders()
             }
@@ -71,6 +71,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 tv_history.textColor = resources.getColor(R.color.text_yellow)
                 view_history.backgroundColor = resources.getColor(R.color.text_yellow)
                 rl_search.visibility = View.VISIBLE
+                rv_orders.adapter = OrderAdapter(mutableListOf<Order>())
             }
             R.id.iv_search -> {
                 var content : String = et_search.text.toString()
@@ -99,11 +100,12 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         navigationBar.setTitle(application.loginResp!!.name)
         navigationBar.displayLeftButton()
         navigationBar.displayRightButton()
+        navigationBar.leftBtn.text = "退出登录"
         navigationBar.rightBtn.text = "配送时间"
         navigationBar.rightBtn.setOnClickListener(this)
         navigationBar.leftBtn.setOnClickListener(this)
 //        rv_orders.adapter = OrderAdapter(orders)
-        rv_orders.layoutManager = GridLayoutManager(this, 2)
+        rv_orders.layoutManager = GridLayoutManager(this, 1)
     }
 
     override fun initEvents() {
@@ -180,6 +182,38 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 
     fun getHistory(content : String){
         //TODO 获取历史订单
+        var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
+            override fun onTestRest(): OrderResp {
+                hideDialog()
+                return OrderResp()
+            }
+
+            override fun onSuccess(t: OrderResp?) {
+                hideDialog()
+                Log.d(TAG , "success" + Gson().toJson(t))
+                for(order in t!!.Items!!){
+                    formatOrder(order)
+                }
+                rv_orders.adapter = OrderAdapter(t!!.Items!!)
+//                pushActivity(OrderActivity::class.java)
+            }
+
+            override fun onFail(t: HttpBaseResp?) {
+                hideDialog()
+                showText(t!!.message)
+                Log.e(TAG , t!!.message);
+                rv_orders.adapter = OrderAdapter(mutableListOf<Order>())
+            }
+
+        }
+        var app = getApplication() as BaseApplication
+        var url =
+                if(DEBUG){
+                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10&searchKey=${content}"
+                }else{
+                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=${app.loginResp!!.resUUID}&orderState=${Settings.ORDER_FINISH}&startIndex=1&count=10&searchKey=${content}"
+                }
+        get(url , callback)
     }
     fun getReceiverOrders(){
         showDialog()
@@ -209,7 +243,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         var app = getApplication() as BaseApplication
         var url =
                 if(DEBUG){
-                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=efad271f-6673-4d91-a9f7-abd3d4fe5f87&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10"
+                    "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=${app.loginResp!!.resUUID}&orderState=0,1,2,3,4,5,6,7,8&startIndex=1&count=10"
                 }else{
                     "${Settings.GET_UNRECEIVE_ORDERS_URL}?resUUID=${app.loginResp!!.resUUID}&orderState=${Settings.ORDER_STORE_CONFIRM},${Settings.ORDER_RIDER_GET},${Settings.ORDER_RIDER_POST}&startIndex=1&count=10"
                 }
@@ -276,6 +310,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 hideDialog()
                 showText(t!!.message)
                 Log.e(TAG , t!!.message);
+                rl_unfinish.performClick()
             }
 
         }
@@ -313,6 +348,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 hideDialog()
                 showText(t!!.message)
                 Log.e(TAG , t!!.message);
+                rl_unfinish.performClick()
             }
 
         }
