@@ -85,10 +85,11 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 pushActivity(PeriodsActivity::class.java)
             }
             R.id.activity_frame_title_btn_left -> {
-                PrefUtils().putString(this@OrderActivity , Settings.NAME_KEY , "")
-                PrefUtils().putString(this@OrderActivity , Settings.PWD_KEY , "")
-                PrefUtils().putString(this@OrderActivity , Settings.RES_ID_KEY , "")
-                pushActivity(MainActivity::class.java , true)
+//                PrefUtils().putString(this@OrderActivity , Settings.NAME_KEY , "")
+//                PrefUtils().putString(this@OrderActivity , Settings.PWD_KEY , "")
+//                PrefUtils().putString(this@OrderActivity , Settings.RES_ID_KEY , "")
+//                pushActivity(MainActivity::class.java , true)
+                showConfirmDialog(500 , "确定退出登录?")
             }
             else -> {
 
@@ -105,7 +106,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         navigationBar.rightBtn.setOnClickListener(this)
         navigationBar.leftBtn.setOnClickListener(this)
 //        rv_orders.adapter = OrderAdapter(orders)
-        rv_orders.layoutManager = GridLayoutManager(this, 1)
+        rv_orders.layoutManager = GridLayoutManager(this, 2)
     }
 
     override fun initEvents() {
@@ -114,6 +115,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         rl_history.setOnClickListener(this)
         iv_search.setOnClickListener(this)
     }
+
 
     override fun initDatas(view: View) {
 //        showDialog()
@@ -136,6 +138,12 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         return super.onKeyDown(keyCode, event)
     }
 
+    fun logout(){
+        PrefUtils().putString(this@OrderActivity , Settings.NAME_KEY , "")
+        PrefUtils().putString(this@OrderActivity , Settings.PWD_KEY , "")
+        PrefUtils().putString(this@OrderActivity , Settings.RES_ID_KEY , "")
+        pushActivity(MainActivity::class.java , true)
+    }
     fun getUnreceiveOrders(){
         showDialog()
         var callback = object  : HttpCallback<OrderResp>(OrderResp::class.java){
@@ -286,6 +294,9 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 }
                 103 -> {
                     cancelOrder(application.order!!)
+                }
+                500 -> {
+                    logout()
                 }
                 else ->{}
             }

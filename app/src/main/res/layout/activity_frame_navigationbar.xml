@@ -19,7 +19,7 @@
         android:padding="3dp"
         android:gravity="left|center_vertical"
         android:drawableLeft="@mipmap/back"
-        android:textColor="@drawable/textcolor_selecter"/>
+        android:textColor="@color/black"/>
 
     <RelativeLayout
             android:id="@+id/activity_frame_titleview_layout"
