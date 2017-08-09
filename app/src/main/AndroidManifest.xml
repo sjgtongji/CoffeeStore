@@ -69,7 +69,11 @@
         <activity android:name=".OrderDetailActivity" android:screenOrientation="portrait" android:theme="@style/Theme.ActivityDialogStyle"></activity>
         <activity android:name=".DialogActivity" android:screenOrientation="portrait" android:theme="@style/Theme.ActivityDialogStyle"></activity>
         <service android:name=".SyncService"></service>
-        <receiver android:name=".NewOrderReceiver"></receiver>
+        <!--<receiver android:name=".NewOrderReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.store.buzztime.coffee_store.http.order"></action>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
         <!--&lt;!&ndash; Required SDK 核心功能&ndash;&gt;-->
         <!--&lt;!&ndash; 可配置android:process参数将PushService放在其他进程中 &ndash;&gt;-->
         <!--<service-->

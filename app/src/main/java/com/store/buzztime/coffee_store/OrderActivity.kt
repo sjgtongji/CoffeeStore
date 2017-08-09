@@ -36,6 +36,7 @@ import org.jetbrains.anko.textColor
  */
 class OrderActivity : BaseActivity(), View.OnClickListener{
     var orderReceiver : OrderReciver ? = null
+    var newOrderReminder : NewOrderReceiver ? = null
     var isUnReceive : Boolean = true
     override fun onClick(p0: View?) {
         when(p0!!.id){
@@ -122,9 +123,13 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         getUnreceiveOrders()
         SyncService().actionStart(this)
         orderReceiver = OrderReciver()
+        newOrderReminder = NewOrderReceiver()
         var filter : IntentFilter = IntentFilter();
         filter.addAction(Settings.ACTION_ORDER)
         registerReceiver(orderReceiver , filter)
+        var reminderFilter : IntentFilter = IntentFilter()
+        reminderFilter.addAction(Settings.ACTION_NEW_REMINDER)
+        registerReceiver(newOrderReminder , reminderFilter)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -185,6 +190,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
 
     override fun onDestroy() {
         unregisterReceiver(orderReceiver)
+        unregisterReceiver(newOrderReminder)
         super.onDestroy()
     }
 
@@ -315,6 +321,10 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 Log.d(TAG , "success" + Gson().toJson(t))
                 hideDialog()
                 rl_unfinish.performClick()
+                var cancelIntent : Intent = Intent(Settings.ACTION_NEW_REMINDER)
+                cancelIntent.putExtra(ACTION_KEY , com.store.buzztime.coffee_store.ACTION_STOP)
+                cancelIntent.putExtra(ORDER_ID_KEY , order.id)
+                sendBroadcast(cancelIntent)
             }
 
             override fun onFail(t: HttpBaseResp?) {
