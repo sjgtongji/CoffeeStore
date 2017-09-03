@@ -268,6 +268,21 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         order.amount = String.format("%.2f", order.payMomey)
         order.distributeTime = formatDateTime(order.deliveryMinTime) + "-" + formatTime(order.deliveryMaxTime)
         order.createTimeShow = formatDateTime(order.createTime)
+        order.orderStateShow = getOrderStateShow(order)
+    }
+
+    fun getOrderStateShow(order : Order) : String{
+        when(order.orderState){
+            //1：已确认；2：取消；3：已配送；4：已完成；5：门店接单；6：骑手取餐；7：骑手送餐中
+            1 -> return "已支付"
+            2 -> return "已取消"
+            3 -> return "配送完成"
+            4 -> return "已完成"
+            5 -> return "门店已接单"
+            6 -> return "骑手已接单"
+            7 -> return "骑手配送中"
+            else -> return ""
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
