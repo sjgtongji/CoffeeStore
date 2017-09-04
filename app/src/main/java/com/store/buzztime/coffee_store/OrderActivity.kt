@@ -108,7 +108,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         navigationBar.rightBtn.setOnClickListener(this)
         navigationBar.leftBtn.setOnClickListener(this)
 //        rv_orders.adapter = OrderAdapter(orders)
-        rv_orders.layoutManager = GridLayoutManager(this, 2)
+        rv_orders.layoutManager = GridLayoutManager(this, 1)
     }
 
     override fun initEvents() {
@@ -288,7 +288,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             5 -> return "门店已接单"
             6 -> return "骑手已接单"
             7 -> return "骑手配送中"
-            else -> return ""
+            else -> return "已支付"
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
