@@ -38,6 +38,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     var orderReceiver : OrderReciver ? = null
     var newOrderReminder : NewOrderReceiver ? = null
     var isUnReceive : Boolean = true
+    var isFirstIn : Boolean = true
     override fun onClick(p0: View?) {
         when(p0!!.id){
             R.id.rl_unfinish -> {
@@ -166,7 +167,13 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                 }
                 app.unReceiveOrders = t!!.Items!!;
                 rv_orders.adapter = OrderAdapter(t.Items!!)
-
+                if(t!!.Items!!.size > 0 && isFirstIn){
+                    isFirstIn = false
+                    var speakIntent : Intent = Intent(Settings.ACTION_NEW_REMINDER)
+                    speakIntent.putExtra(ACTION_KEY , com.store.buzztime.coffee_store.ACTION_START)
+                    speakIntent.putExtra(ORDER_ID_KEY , t!!.Items!![0].id)
+                    sendBroadcast(speakIntent)
+                }
 //                pushActivity(OrderActivity::class.java)
             }
 
