@@ -31,10 +31,10 @@ class Settings{
 
         var DIALOG_TITLE_KEY : String = "com.store.buzztime.coffee_store.http.dialogtitle"
         var DIALOG_REQUEST_CODE : Int = 100
-        var DEBUG : Boolean = true;
+        var DEBUG : Boolean = false;
         var TEST_REST : Boolean = false;
         var SERVER_DEBUG = "http://139.196.228.248:52072/Rest/CoffeeService/"
-        var SERVER_RELEASE = "http://waimai.buzztimecoffee.com/";
+        var SERVER_RELEASE = "http://139.196.47.184:52072/Rest/CoffeeService/";
         var LOGIN = "getManager";
         var GET_UNRECEIVE_ORDERS = "getOrderByResUUID";
         var GET_BUSINESS_HOURWEEKTYPE = "GetBusinessHourWeekType"
