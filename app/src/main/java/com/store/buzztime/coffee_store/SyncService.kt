@@ -33,7 +33,7 @@ class SyncService : Service() {
 
     private var mStarted: Boolean = false // 服务是否已启动
 
-    private val mWakeLock: PowerManager.WakeLock? = null // 亮屏控制器
+    private var mWakeLock: PowerManager.WakeLock? = null // 亮屏控制器
 
     private val http : HttpUtils = HttpUtils()
 
@@ -270,7 +270,7 @@ class SyncService : Service() {
 
             // 开始处理具体事务
             // startTask();
-
+            acquireWakeLock()
             startKeepAlives(DEFAULT_KEEP_ALIVE_INTERVAL)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -390,4 +390,16 @@ class SyncService : Service() {
     private fun logE(tr: Throwable) {
         Log.e(TAG, tr.localizedMessage, tr)
     }
+
+    private fun acquireWakeLock(){
+        if(mWakeLock == null){
+            var pm : PowerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK , "PostLocationService")
+            mWakeLock?.acquire()
+        }
+
+//        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, "PostLocationService")
+    }
+
+
 }

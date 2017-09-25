@@ -108,7 +108,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         navigationBar.rightBtn.setOnClickListener(this)
         navigationBar.leftBtn.setOnClickListener(this)
 //        rv_orders.adapter = OrderAdapter(orders)
-        rv_orders.layoutManager = GridLayoutManager(this, 1)
+        rv_orders.layoutManager = GridLayoutManager(this, 2)
     }
 
     override fun initEvents() {
