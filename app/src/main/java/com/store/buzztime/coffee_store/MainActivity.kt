@@ -82,7 +82,7 @@ class MainActivity : BaseActivity() , View.OnClickListener{
 
     var user : User = User();
     lateinit var dataBind : ActivityMainBinding;
-    var permissions : MutableList<String> = mutableListOf(android.Manifest.permission.READ_PHONE_STATE);
+    var permissions : MutableList<String> = mutableListOf(android.Manifest.permission.READ_PHONE_STATE , android.Manifest.permission.CALL_PHONE);
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun initViews() {

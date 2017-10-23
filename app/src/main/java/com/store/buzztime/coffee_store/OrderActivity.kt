@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.GridLayoutManager
@@ -17,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import com.google.gson.Gson
 import com.store.buzztime.coffee_store.Bean.Order
@@ -30,6 +32,9 @@ import com.store.buzztime.coffee_store.http.*
 import kotlinx.android.synthetic.main.activity_order.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
+import android.support.v4.content.ContextCompat.startActivity
+
+
 
 /**
  * Created by sjg on 2017/6/27.
@@ -436,6 +441,15 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                     }
                     pushActivityForResult(intent , 1)
                 }
+                R.id.iv_phone -> {
+
+                    var order : Order = data.get(v.tag as Int)
+                    Log.e(TAG , order.telephone)
+                    val intent = Intent()
+                    intent.action = Intent.ACTION_CALL
+                    intent.data = Uri.parse("tel:"+ order.telephone)
+                    startActivity(intent)
+                }
                 else -> {Log.d("" , "error")}
             }
         }
@@ -448,6 +462,8 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
             p0.btn_cancel.setTag(p1)
             p0.ll_order.setOnClickListener(this)
             p0.ll_order.setTag(p1)
+            p0.iv_phone.setOnClickListener(this)
+            p0.iv_phone.setTag(p1)
             if(!isUnReceive){
                 p0.btn_receive.visibility = View.GONE
                 p0.btn_cancel.visibility = View.GONE
@@ -474,10 +490,12 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
         var btn_receive : Button
         var btn_cancel : Button
         var ll_order : LinearLayout
+        var iv_phone : ImageView
         init {
             btn_receive = binding.root.findViewById(R.id.btn_receive) as Button
             btn_cancel = binding.root.findViewById(R.id.btn_cancel) as Button
             ll_order = binding.root.findViewById(R.id.ll_order) as LinearLayout
+            iv_phone = binding.root.findViewById(R.id.iv_phone) as ImageView
         }
         fun bind(data : Any){
             binding.setVariable(BR.data , data)
