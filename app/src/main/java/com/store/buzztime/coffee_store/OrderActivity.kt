@@ -446,7 +446,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
                     var order : Order = data.get(v.tag as Int)
                     Log.e(TAG , order.telephone)
                     val intent = Intent()
-                    intent.action = Intent.ACTION_CALL
+                    intent.action = Intent.ACTION_DIAL
                     intent.data = Uri.parse("tel:"+ order.telephone)
                     startActivity(intent)
                 }
