@@ -13,10 +13,6 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -33,7 +29,7 @@ import kotlinx.android.synthetic.main.activity_order.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
 import android.support.v4.content.ContextCompat.startActivity
-
+import android.view.*
 
 
 /**
@@ -105,6 +101,7 @@ class OrderActivity : BaseActivity(), View.OnClickListener{
     }
 
     override fun initViews() {
+        window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         navigationBar.setTitle(application.loginResp!!.name)
         navigationBar.displayLeftButton()
         navigationBar.displayRightButton()
